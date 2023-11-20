@@ -44,7 +44,7 @@ class ProductsList extends Component<IProductsListProps, IProductsListState> {
     });
   }
 
-  getProductsList(search?: string) {
+  getProductsList() {
     this.props.getProducts(this.state.page, this.state.searchText);
   }
 

@@ -32,6 +32,7 @@ export interface IDashboardState {
   activeUserComponent: ActionTypes;
   isLoading: boolean;
   errorMessage: string;
+  allPartnumbersCount: number;
 }
 
 const DASHBOARD_INITIAL_STATE: IDashboardState = {
@@ -86,6 +87,7 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
   },
   isLoading: false,
   errorMessage: "",
+  allPartnumbersCount: 0,
 };
 
 export const dashboardReducer = (
@@ -160,7 +162,8 @@ export const dashboardReducer = (
       return {
         ...state,
         isLoading: false,
-        partnumbers: action.payload,
+        partnumbers: action.payload.partnumbers,
+        allPartnumbersCount: action.payload.allPartnumbersCount,
         errorMessage: null,
       };
 
