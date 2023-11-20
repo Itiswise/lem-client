@@ -6,3 +6,5 @@ export const ROOT_URL =
 export const headers = {
   authorization: localStorage.getItem("token") || "no token",
 };
+
+export const itemsPerPage = 10;
