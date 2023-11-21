@@ -27,6 +27,7 @@ class ProductsList extends Component<IProductsListProps, IProductsListState> {
     super(props);
     this.state = { page: 1 };
   }
+
   componentDidMount() {
     this.getProductsList();
   }

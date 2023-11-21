@@ -131,7 +131,7 @@ class PartnumbersList2 extends Component<IPartnumbersListProps, IPartnumbersList
     if (errorMessage) {
       return <div className="alert">{this.renderAlert()}</div>;
     }
-    if (isLoading) {
+    if (isLoading && !this.props.partnumbers) {
       return <Loader />;
     }
     return (
