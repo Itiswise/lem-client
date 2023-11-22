@@ -137,7 +137,8 @@ const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
     if (Object.keys(inputValues).length) {
       setFilters(inputValues);
     }
-  }, [inputValues, setFilters]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValues]);
 
   useEffect(() => {
     if (!isMountingRef.current) {
@@ -145,7 +146,8 @@ const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
     }
 
     isMountingRef.current = false;
-  }, [sortingOrder, sortingColumn, setOrder]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortingOrder, sortingColumn]);
 
   return (
     <div className="orders-list__page">
