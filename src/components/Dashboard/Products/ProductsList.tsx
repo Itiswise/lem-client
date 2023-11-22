@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import * as actions from "../../../actions";
 import { ProductType } from "../../../actions";
 import { StoreState } from "../../../reducers";
-import { by } from "../../../utils/by";
 import ProductItem from "./ProductItem";
 import "./ProductsListStyle.scss";
 import ReactPaginate from 'react-paginate';

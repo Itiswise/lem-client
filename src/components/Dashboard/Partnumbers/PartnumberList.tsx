@@ -8,7 +8,6 @@ import {
 } from "../../../actions";
 import { StoreState } from "../../../reducers";
 import Loader from "../../Loader";
-import { by } from "../../../utils/by";
 import PartnumberItem from "./PartnumberItem";
 import "./PartnumberListStyle.scss";
 import ReactPaginate from 'react-paginate';
@@ -127,7 +126,7 @@ class PartnumbersList2 extends Component<IPartnumbersListProps, IPartnumbersList
 
   render() {
     const pageCount = this.props.allPartnumbersCount ? Math.ceil(this.props.allPartnumbersCount / itemsPerPage) : 0;
-    const { isLoading, errorMessage, filteredPartnumbers } = this.props;
+    const { isLoading, errorMessage } = this.props;
     if (errorMessage) {
       return <div className="alert">{this.renderAlert()}</div>;
     }

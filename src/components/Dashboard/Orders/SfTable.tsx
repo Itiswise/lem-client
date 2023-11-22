@@ -30,7 +30,7 @@ interface ITarget {
 }
 
 const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
-  const { columns, rows, viewOrderDetails } = props;
+  const { columns, rows, viewOrderDetails, setOrder, setFilters } = props;
 
   const columnNames = columns.map((column) => column.name);
 
@@ -135,17 +135,17 @@ const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
 
   useEffect(() => {
     if (Object.keys(inputValues).length) {
-      props.setFilters(inputValues);
+      setFilters(inputValues);
     }
-  }, [inputValues]);
+  }, [inputValues, setFilters]);
 
   useEffect(() => {
     if (!isMountingRef.current) {
-      props.setOrder(sortingOrder, sortingColumn);
+      setOrder(sortingOrder, sortingColumn);
     }
 
     isMountingRef.current = false;
-  }, [sortingOrder, sortingColumn]);
+  }, [sortingOrder, sortingColumn, setOrder]);
 
   return (
     <div className="orders-list__page">
