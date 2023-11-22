@@ -157,7 +157,7 @@ class PartnumbersList2 extends Component<IPartnumbersListProps, IPartnumbersList
           <button
             className="btn btn--accent "
             onClick={() => {
-              this.getCsv(filteredPartnumbers, [
+              this.getCsv(this.props.partnumbers, [
                 "partNumber",
                 "givenTactTime",
                 "cleanRoomTime",

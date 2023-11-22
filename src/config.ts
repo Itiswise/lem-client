@@ -7,4 +7,4 @@ export const headers = {
   authorization: localStorage.getItem("token") || "no token",
 };
 
-export const itemsPerPage = 10;
+export const itemsPerPage = 20;

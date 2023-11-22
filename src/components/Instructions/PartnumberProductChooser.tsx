@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { reduxForm, Field, InjectedFormProps } from "redux-form";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { by } from "../../utils/by";
+import React, {Component} from "react";
+import {reduxForm, Field, InjectedFormProps} from "redux-form";
+import {compose} from "redux";
+import {connect} from "react-redux";
+import {by} from "../../utils/by";
 import * as actions from "../../actions";
-import { ProductType, MenuDataType, SetMessageAction } from "../../actions";
-import { StoreState } from "../../reducers";
+import {ProductType, MenuDataType, SetMessageAction} from "../../actions";
+import {StoreState} from "../../reducers";
 import requireAuth from "../requireAuth";
 
 interface IFormProps extends React.ChangeEvent<HTMLInputElement> {
@@ -32,7 +32,7 @@ class PartnumberProductChooser extends Component<
   }
 
   handleChange = (formProps: IFormProps) => {
-    const { getProduct, setMessage, reset } = this.props;
+    const {getProduct, setMessage, reset} = this.props;
     const id = formProps.target.value;
     if (id) {
       setMessage("");
@@ -42,13 +42,13 @@ class PartnumberProductChooser extends Component<
   };
 
   renderOptions() {
-    const { products } = this.props;
+    const {products} = this.props;
     if (products) {
       return (
         <>
           {products.sort(by("partNumber")).map((product) => {
-            const { _id, partNumber } = product;
-            return <option key={_id} value={_id} children={partNumber} />;
+            const {_id, partNumber} = product;
+            return <option key={_id} value={_id} children={partNumber}/>;
           })}
         </>
       );
@@ -56,7 +56,7 @@ class PartnumberProductChooser extends Component<
   }
 
   render() {
-    const { isLoading } = this.props;
+    const {isLoading} = this.props;
     return (
       <div className="">
         <form className="">
@@ -74,7 +74,7 @@ class PartnumberProductChooser extends Component<
               onChange={this.handleChange}
               required
             >
-              <option className="order-picker__option" />
+              <option className="order-picker__option"/>
               {this.renderOptions()}
             </Field>
           </fieldset>
@@ -104,5 +104,5 @@ function mapStateToProps(state: StoreState) {
 
 export default compose(
   connect(mapStateToProps, actions),
-  reduxForm({ form: "partnumberProductChooser" })
+  reduxForm({form: "partnumberProductChooser"})
 )(requireAuth(PartnumberProductChooser));
