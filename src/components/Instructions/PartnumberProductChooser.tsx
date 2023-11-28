@@ -50,7 +50,6 @@ class PartnumberProductChooser extends Component<
   }
 
   render() {
-    const {isLoading} = this.props;
     return (
       <div className="">
         <form className="">
