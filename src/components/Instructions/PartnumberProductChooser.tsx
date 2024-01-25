@@ -58,7 +58,7 @@ class PartnumberProductChooser extends Component<
               part number
             </label>
             <AsyncSelect
-              defaultOptions
+              noOptionsMessage={(e) => e.inputValue ? `no results` : 'type to search part number'}
               className="product-chooser-form__select-async"
               placeholder=""
               loadOptions={this.promiseOptions.bind(this)}

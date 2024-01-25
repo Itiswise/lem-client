@@ -16,6 +16,7 @@ interface IStickerScanProductChooser {
   productDetails: ProductType;
   setMessage: (message: string) => SetMessageAction;
   getProduct: (productId?: string) => void;
+  getProducts: (page?: number, search?: string) => void;
 }
 
 interface IFormProps {
@@ -29,18 +30,19 @@ class StickerScanProductChooser extends Component<
     return code.substr(4).split("(")[0];
   }
 
-  getIdForPartNumber(partNumber: string) {
+  async getIdForPartNumber(partNumber: string) {
+    await this.props.getProducts(1, partNumber ?? '');
     const filteredProducts = this.props.products.filter(
       (product) => product.partNumber === partNumber
     );
     return filteredProducts.length ? filteredProducts[0]._id : null;
   }
 
-  onSubmit = (formProps: IFormProps) => {
+  onSubmit = async (formProps: IFormProps) => {
     const { getProduct, reset, setMessage } = this.props;
     const code = formProps.scanLittleSticker;
     const partNumber = this.getPartNumberFromScanCode(code);
-    const id = this.getIdForPartNumber(partNumber);
+    const id = await this.getIdForPartNumber(partNumber);
     if (id) {
       setMessage("");
       getProduct(id);

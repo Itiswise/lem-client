@@ -21,6 +21,7 @@ interface IZkScanProductChooserProps {
   getProduct: (productId?: string) => void;
   setMessage: (message: string) => SetMessageAction;
   getMenu: () => void;
+  getProducts: (page?: number, search?: string) => void;
 }
 
 class ZkScanProductChooser extends Component<
@@ -38,18 +39,19 @@ class ZkScanProductChooser extends Component<
     return orders.length ? orders[0].partNumber : null;
   }
 
-  getIdForPartNumber(partNumber: string | null) {
+  async getIdForPartNumber(partNumber: string | null) {
+    await this.props.getProducts(1, partNumber ?? '');
     const filteredProducts = this.props.products.filter(
       (product) => product.partNumber === partNumber
     );
     return filteredProducts.length ? filteredProducts[0]._id : null;
   }
 
-  onSubmit = (formProps: IFormProps) => {
+  onSubmit = async (formProps: IFormProps) => {
     const { getProduct, reset, setMessage } = this.props;
     const zk = formProps.scanZk;
     const partNumber = this.getPartNumberFromZk(zk);
-    const id = this.getIdForPartNumber(partNumber);
+    const id = await this.getIdForPartNumber(partNumber);
 
     if (!partNumber) {
       setMessage(`order ${zk} is not found`);
