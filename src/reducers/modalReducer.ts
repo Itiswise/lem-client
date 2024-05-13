@@ -10,10 +10,13 @@ export interface IModalState {
     | "delete redirection"
     | "delete product"
     | "delete order"
+    | "delete partnumber"
     | "";
   redirectionId?: string;
   productId?: string;
+  partnumberId?: string;
   callbackOnClose?: () => void;
+  errorMessage?: string;
 }
 
 const MODAL_INITIAL_STATE: IModalState = {
@@ -23,6 +26,8 @@ const MODAL_INITIAL_STATE: IModalState = {
   modalAction: "",
   redirectionId: "",
   productId: "",
+  partnumberId: "",
+  errorMessage: "",
 };
 
 export const modalReducer = (
@@ -50,6 +55,7 @@ export const modalReducer = (
         modalHeader: "",
         modalContent: "",
         modalAction: "",
+        errorMessage: "",
       };
 
     case ActionTypes.OPEN_DELETE_MODAL:
@@ -93,6 +99,23 @@ export const modalReducer = (
                  smash the “YES…” button`,
         modalAction: "delete product",
         productId: action.payload,
+      };
+
+    case ActionTypes.OPEN_DELETE_PARTNUMBER_MODAL:
+      return {
+        ...state,
+        isModalOpened: true,
+        modalHeader: "Are you sure you want to delete this partnumber?",
+        modalContent: `It can't be undone! So, if you are really 100% sure,
+                 smash the “YES…” button`,
+        modalAction: "delete partnumber",
+        partnumberId: action.payload,
+      };
+
+    case ActionTypes.SET_MODAL_ERROR_MESSAGE:
+      return {
+        ...state,
+        errorMessage: action.payload,
       };
 
     default:

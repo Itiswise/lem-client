@@ -24,6 +24,7 @@ interface IPartnumbersListProps {
   errorMessage: string;
   isLoading: boolean;
   allPartnumbersCount?: number;
+  startAddingPartnumber: () => void;
 }
 
 interface IPartnumbersListState {
@@ -41,6 +42,10 @@ class PartnumbersList2 extends Component<IPartnumbersListProps, IPartnumbersList
     await this.props.getPartnumberConfig();
     await this.props.getPartnumbers(1);
     await this.filterPartnumbers();
+
+    window.addEventListener("partnumberDeleted", () => {
+      this.getPartnumbersList();
+    });
   }
 
   filterPartnumbers(e?: React.FormEvent<HTMLInputElement>) {
@@ -126,7 +131,7 @@ class PartnumbersList2 extends Component<IPartnumbersListProps, IPartnumbersList
 
   render() {
     const pageCount = this.props.allPartnumbersCount ? Math.ceil(this.props.allPartnumbersCount / itemsPerPage) : 0;
-    const { isLoading, errorMessage } = this.props;
+    const { isLoading, errorMessage, startAddingPartnumber } = this.props;
     if (errorMessage) {
       return <div className="alert">{this.renderAlert()}</div>;
     }
@@ -164,6 +169,14 @@ class PartnumbersList2 extends Component<IPartnumbersListProps, IPartnumbersList
             }}
           >
             to CSV
+          </button>
+          <button
+            className="btn btn--accent "
+            onClick={() => {
+              startAddingPartnumber();
+            }}
+          >
+            Add new
           </button>
         </div>
         <div className="partnumber-list__header">

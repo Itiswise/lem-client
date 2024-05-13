@@ -252,6 +252,12 @@ export const widsReducer = (state = WIDS_INITIAL_STATE, action: WidsAction) => {
         productDetails: {},
       };
 
+    case ActionTypes.DELETE_PARTNUMBER:
+      return {
+        ...state,
+        message: action.payload,
+      };
+
     default:
       return state;
   }

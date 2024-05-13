@@ -5,7 +5,7 @@ import * as actions from "../../../actions";
 import {
   PartnumberType,
   PartnumberConfigType,
-  ComputationsBase,
+  ComputationsBase, IOpenDeletePartnumberModal, OpenDeletePartnumberModalAction,
 } from "../../../actions";
 import { hourlyPaceToTactTime } from "../../../utils/hourlyPaceToTactTime";
 import { tactTimeToHourlyPace } from "../../../utils/tactTimeToHourlyPace";
@@ -14,6 +14,9 @@ import "./PartnumberItemStyle.scss";
 interface IPartnumberItemProps extends PartnumberType {
   startEditingPartnumber: (Partnumber: PartnumberType) => void;
   partnumberConfig: PartnumberConfigType;
+  openDeletePartnumberModal: ({
+    _id,
+  }: IOpenDeletePartnumberModal) => OpenDeletePartnumberModalAction;
 }
 
 class PartnumberItem extends Component<IPartnumberItemProps> {
@@ -63,6 +66,7 @@ class PartnumberItem extends Component<IPartnumberItemProps> {
       xlsxTactTime,
       startEditingPartnumber,
       automatic,
+      openDeletePartnumberModal
     } = this.props;
 
     return (
@@ -92,6 +96,14 @@ class PartnumberItem extends Component<IPartnumberItemProps> {
           >
             EDIT
           </button>
+          <button
+            className="btn btn--delete btn--thin"
+            onClick={() => {
+              openDeletePartnumberModal({_id});
+            }}
+          >
+            DELETE
+          </button>
         </div>
       </div>
     );
@@ -99,7 +111,7 @@ class PartnumberItem extends Component<IPartnumberItemProps> {
 }
 
 function mapStateToProps(state: StoreState) {
-  const { partnumberConfig } = state.dashboard;
+  const {partnumberConfig} = state.dashboard;
   return {
     partnumberConfig,
   };
