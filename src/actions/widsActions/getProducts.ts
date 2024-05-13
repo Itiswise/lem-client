@@ -2,10 +2,14 @@ import axios from "axios";
 import { Dispatch } from "redux";
 import { ActionTypes, ProductType } from "../../actions";
 import { ROOT_URL, headers } from "../../config";
+import { itemsPerPage } from "../../config";
 
 export type GetProductsAction = {
   type: ActionTypes.GET_PRODUCTS;
-  payload: ProductType[];
+  payload: {
+    products: ProductType[];
+    allProductsCount: number;
+  };
 };
 
 export type GetProductsActionError = {
@@ -13,14 +17,19 @@ export type GetProductsActionError = {
   payload: string;
 };
 
-export const getProducts = () => async (dispatch: Dispatch) => {
+export const getProducts = (page?: number, search?: string) => async (dispatch: Dispatch) => {
   try {
     const response = await axios.get(`${ROOT_URL}/api/product`, {
       headers,
+      params: {
+          limit: page ? itemsPerPage : 0,
+          skip: page ? (page - 1) * itemsPerPage : 0,
+          search: search,
+      },
     });
     dispatch<GetProductsAction>({
       type: ActionTypes.GET_PRODUCTS,
-      payload: response.data.products,
+      payload: response.data,
     });
   } catch (e: any) {
     dispatch<GetProductsActionError>({

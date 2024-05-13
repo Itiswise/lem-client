@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import { ActionTypes } from "..";
-import { ROOT_URL, headers } from "../../config";
+import {ROOT_URL, headers, itemsPerPage} from "../../config";
 
 export type PartnumberType = {
   _id: string;
@@ -21,7 +21,10 @@ export type GetPartnumbersBeginAction = {
 
 export type GetPartnumbersSuccessAction = {
   type: ActionTypes.GET_PARTNUMBERS_SUCCESS;
-  payload: PartnumberType[];
+  payload: {
+    partnumbers: PartnumberType[];
+    allPartnumbersCount: number;
+  };
 };
 
 export type GetPartnumbersActionError = {
@@ -29,13 +32,18 @@ export type GetPartnumbersActionError = {
   payload: string;
 };
 
-export const getPartnumbers = () => async (dispatch: Dispatch) => {
+export const getPartnumbers = (page?: number, search?: string) => async (dispatch: Dispatch) => {
   dispatch<GetPartnumbersBeginAction>({
     type: ActionTypes.GET_PARTNUMBERS_BEGIN,
   });
   try {
     const response = await axios.get(`${ROOT_URL}/api/product/statistics`, {
       headers,
+      params: {
+        limit: page ? itemsPerPage : 0,
+        skip: page ? (page - 1) * itemsPerPage : 0,
+        search: search,
+      },
     });
     dispatch<GetPartnumbersSuccessAction>({
       type: ActionTypes.GET_PARTNUMBERS_SUCCESS,

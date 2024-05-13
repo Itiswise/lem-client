@@ -20,6 +20,7 @@ export interface IWidsState {
   initRedirection?: RedirectionType | {};
   productId?: string;
   initProduct?: ProductType | {};
+  allProductsCount?: number;
 }
 
 const WIDS_INITIAL_STATE: IWidsState = {
@@ -37,6 +38,7 @@ const WIDS_INITIAL_STATE: IWidsState = {
   initRedirection: {},
   productId: "",
   initProduct: {},
+  allProductsCount: 0,
 };
 
 export const widsReducer = (state = WIDS_INITIAL_STATE, action: WidsAction) => {
@@ -137,7 +139,8 @@ export const widsReducer = (state = WIDS_INITIAL_STATE, action: WidsAction) => {
     case ActionTypes.GET_PRODUCTS:
       return {
         ...state,
-        products: action.payload,
+        products: action.payload.products,
+        allProductsCount: action.payload.allProductsCount,
       };
     case ActionTypes.GET_PRODUCTS_ERROR:
       return { ...state, errorMessage: action.payload };

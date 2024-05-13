@@ -8,48 +8,56 @@ import {
 } from "../../../actions";
 import { StoreState } from "../../../reducers";
 import Loader from "../../Loader";
-import { by } from "../../../utils/by";
 import PartnumberItem from "./PartnumberItem";
 import "./PartnumberListStyle.scss";
+import ReactPaginate from 'react-paginate';
+import { itemsPerPage } from "../../../config";
 
 interface IPartnumbersListProps {
   partnumbers?: PartnumberType[];
   partnumberConfig: PartnumberConfigType;
   filteredPartnumbers?: PartnumberType[];
-  getPartnumbers: () => void;
+  getPartnumbers: (page?: number, search?: string) => void;
   getPartnumberConfig: () => void;
   configurePartnumbers: () => void;
   updatePartnumbersList: (filteredPartnumbers: PartnumberType[]) => void;
   errorMessage: string;
   isLoading: boolean;
+  allPartnumbersCount?: number;
 }
 
-class PartnumbersList2 extends Component<IPartnumbersListProps> {
+interface IPartnumbersListState {
+  page: number;
+  searchText?: string;
+}
+
+class PartnumbersList2 extends Component<IPartnumbersListProps, IPartnumbersListState> {
+  constructor(props: IPartnumbersListProps) {
+    super(props);
+    this.state = { page: 1 };
+  }
+
   async componentDidMount() {
     await this.props.getPartnumberConfig();
-    await this.props.getPartnumbers();
+    await this.props.getPartnumbers(1);
     await this.filterPartnumbers();
   }
 
   filterPartnumbers(e?: React.FormEvent<HTMLInputElement>) {
-    const text = e ? e.currentTarget.value : "";
-    const filteredPartnumbers: PartnumberType[] =
-      this.getFilteredPartnumbersForText(text);
-    this.props.updatePartnumbersList(filteredPartnumbers);
+    const searchText = e ? e.currentTarget.value : "";
+    this.setState({page: 1, searchText}, () => {
+      this.getPartnumbersList();
+    });
   }
 
-  getFilteredPartnumbersForText(text: string) {
-    if (this.props.partnumbers) {
-      return this.props.partnumbers.filter((product) => {
-        if (product && product.partNumber) {
-          return product.partNumber.toLowerCase().includes(text.toLowerCase());
-        } else {
-          return false;
-        }
-      });
-    } else {
-      return [];
-    }
+  handlePageClick(event: any) {
+    this.setState({ page: event.nextSelectedPage + 1 }, () => {
+      this.getPartnumbersList();
+    });
+  }
+
+  getPartnumbersList() {
+    this.props.getPartnumbers(this.state.page, this.state.searchText);
   }
 
   fileName() {
@@ -86,29 +94,6 @@ class PartnumbersList2 extends Component<IPartnumbersListProps> {
     this.downloadCsv(this.csvMaker(data, columns));
   }
 
-  renderPartnumbersList() {
-    const { filteredPartnumbers } = this.props;
-
-    if (filteredPartnumbers) {
-      return filteredPartnumbers
-        .sort(by("partNumber"))
-        .map((product) => (
-          <PartnumberItem
-            key={product._id}
-            _id={product._id}
-            partNumber={product.partNumber}
-            givenTactTime={product.givenTactTime}
-            suggestedTactTime={product.suggestedTactTime}
-            cleanRoomTime={product.cleanRoomTime}
-            givenHourlyRate={product.givenHourlyRate}
-            suggestedHourlyRate={product.suggestedHourlyRate}
-            xlsxTactTime={product.xlsxTactTime}
-            automatic={product.automatic}
-          />
-        ));
-    }
-  }
-
   renderConditionalHeaders() {
     const { partnumberConfig } = this.props;
     const { computationsBase } = partnumberConfig;
@@ -140,11 +125,12 @@ class PartnumbersList2 extends Component<IPartnumbersListProps> {
   }
 
   render() {
-    const { isLoading, errorMessage, filteredPartnumbers } = this.props;
+    const pageCount = this.props.allPartnumbersCount ? Math.ceil(this.props.allPartnumbersCount / itemsPerPage) : 0;
+    const { isLoading, errorMessage } = this.props;
     if (errorMessage) {
       return <div className="alert">{this.renderAlert()}</div>;
     }
-    if (isLoading) {
+    if (isLoading && !this.props.partnumbers) {
       return <Loader />;
     }
     return (
@@ -155,6 +141,7 @@ class PartnumbersList2 extends Component<IPartnumbersListProps> {
             <input
               className="partnumber-list__filter__input"
               placeholder="search..."
+              value={this.state.searchText}
               onChange={(e) => {
                 this.filterPartnumbers(e);
               }}
@@ -163,13 +150,13 @@ class PartnumbersList2 extends Component<IPartnumbersListProps> {
           <div>
             <span>Count:</span>
             <span className="partnumber-page__header__info">
-              {filteredPartnumbers?.length}
+              {this.props.allPartnumbersCount}
             </span>
           </div>
           <button
             className="btn btn--accent "
             onClick={() => {
-              this.getCsv(filteredPartnumbers, [
+              this.getCsv(this.props.partnumbers, [
                 "partNumber",
                 "givenTactTime",
                 "cleanRoomTime",
@@ -184,7 +171,28 @@ class PartnumbersList2 extends Component<IPartnumbersListProps> {
           {this.renderConditionalHeaders()}
           <span className="partnumber-list__header__item">clean room tt</span>
         </div>
-        <div className="partnumber-list">{this.renderPartnumbersList()}</div>
+        <div className="partnumber-list">
+          { this.props.partnumbers && this.props.partnumbers.map((product) => <PartnumberItem
+              key={product._id}
+              _id={product._id}
+              partNumber={product.partNumber}
+              givenTactTime={product.givenTactTime}
+              suggestedTactTime={product.suggestedTactTime}
+              cleanRoomTime={product.cleanRoomTime}
+              givenHourlyRate={product.givenHourlyRate}
+              suggestedHourlyRate={product.suggestedHourlyRate}
+              xlsxTactTime={product.xlsxTactTime}
+              automatic={product.automatic}
+          /> )}
+        </div>
+        { pageCount > 1 && <ReactPaginate
+            className="pagination"
+            pageCount={pageCount}
+            forcePage={this.state.page - 1}
+            onClick={(e) => {
+              this.handlePageClick(e);
+            }}
+        />}
       </div>
     );
   }
@@ -197,6 +205,7 @@ function mapStateToProps(state: StoreState) {
     isLoading,
     errorMessage,
     partnumberConfig,
+    allPartnumbersCount,
   } = state.dashboard;
   return {
     filteredPartnumbers,
@@ -204,6 +213,7 @@ function mapStateToProps(state: StoreState) {
     isLoading,
     errorMessage,
     partnumberConfig,
+    allPartnumbersCount,
   };
 }
 

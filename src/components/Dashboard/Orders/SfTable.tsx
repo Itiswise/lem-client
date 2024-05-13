@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { connect } from "react-redux";
 import * as actions from "../../../actions";
 import { StoreState } from "../../../reducers";
@@ -17,6 +17,9 @@ export interface SfTableProps<T> {
   columns: IColumn<T>[];
   rows: RowType<T>;
   viewOrderDetails: (_id: string) => void;
+  setFilters: (filterObject: Object) => void;
+  setOrder: (order: OrderType, column: string | number | symbol) => void;
+  allCount: number;
 }
 
 interface ITarget {
@@ -27,7 +30,7 @@ interface ITarget {
 }
 
 const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
-  const { columns, rows, viewOrderDetails } = props;
+  const { columns, rows, viewOrderDetails, setOrder, setFilters } = props;
 
   const columnNames = columns.map((column) => column.name);
 
@@ -35,6 +38,7 @@ const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
   const [sortingOrder, setSortingOrder] = useState<OrderType>("asc");
   const [sortingColumn, setSortingColumn] = useState<keyof T | "">("");
   const [inputValues, setInputValues] = useState({});
+  const isMountingRef = useRef(true);
 
   const handleChange = ({ target: { name, value } }: ITarget) => {
     setInputValues({
@@ -105,8 +109,8 @@ const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
   };
 
   const renderTableBody = () => {
-    if (dataTable.length > 0) {
-      return dataTable.map((row) => {
+    if (props.rows.length > 0) {
+      return props.rows.map((row) => {
         const { _id } = row;
         return (
           <tr
@@ -125,47 +129,25 @@ const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
     }
   };
 
-  const renderCount = dataTable ? dataTable.length : 0;
+  useEffect(() => {
+    isMountingRef.current = true;
+  }, []);
 
   useEffect(() => {
-    function includesAllTheDataFromInputs(
-      element: Object,
-      index: number,
-      array: Object[]
-    ) {
-      const inputs = Object.entries(inputValues);
-
-      let validInputs = 0;
-
-      inputs.forEach((entry) => {
-        const [key, value] = entry;
-
-        if (
-          //@ts-ignore
-          element[key]
-            .toString()
-            .toLowerCase()
-            //@ts-ignore
-            .includes(value.toString().toLowerCase())
-        ) {
-          validInputs++;
-        }
-      });
-
-      return validInputs === inputs.length;
+    if (Object.keys(inputValues).length) {
+      setFilters(inputValues);
     }
-    const getFilteredTable = () => {
-      return rows.filter(includesAllTheDataFromInputs);
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValues]);
 
-    const filterItems = () => {
-      const filteredItems = getFilteredTable() as RowType<T>;
+  useEffect(() => {
+    if (!isMountingRef.current) {
+      setOrder(sortingOrder, sortingColumn);
+    }
 
-      setDataTable(filteredItems);
-    };
-
-    filterItems();
-  }, [inputValues, rows]);
+    isMountingRef.current = false;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortingOrder, sortingColumn]);
 
   return (
     <div className="orders-list__page">
@@ -173,7 +155,7 @@ const SfTable = <T extends { _id: string }>(props: SfTableProps<T>) => {
         <h1 className="main-page__title">Orders List</h1>
         <h1 className="main-page__title">
           <span className="weight500">count: </span>
-          <span className="weight800"> {renderCount}</span>
+          <span className="weight800"> {props.allCount}</span>
         </h1>
       </div>
 

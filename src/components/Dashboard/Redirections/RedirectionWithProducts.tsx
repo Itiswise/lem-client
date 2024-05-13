@@ -14,6 +14,8 @@ import { StoreState } from "../../../reducers";
 import { by } from "../../../utils/by";
 import requireAuth from "../../requireAuth";
 import "./RedirectionWithProductsStyle.scss";
+import ReactPaginate from "react-paginate";
+import {itemsPerPage} from "../../../config";
 
 interface IFormProps {
   [key: string]: boolean;
@@ -35,22 +37,44 @@ interface IRedirectionWithProductsProps {
     productListWithDots,
   }: IUpdateManyProdsWithOneRedir) => void;
   sendProducts: (productList: ProductType[]) => SendProductsAction;
+  getProducts: (page?: number, search?: string) => void;
+  allProductsCount?: number;
+}
+
+interface IProductsListState {
+  page: number;
+  searchText?: string;
 }
 
 class RedirectionWithProducts extends Component<
-  InjectedFormProps<IFormProps> & IRedirectionWithProductsProps
+  InjectedFormProps<IFormProps> & IRedirectionWithProductsProps, IProductsListState
 > {
+  constructor(props: InjectedFormProps<IFormProps> & IRedirectionWithProductsProps) {
+    super(props);
+    this.state = { page: 1 };
+  }
   async componentDidMount() {
     const { startAddingProductsToRedirection, redirectionId } = this.props;
     await startAddingProductsToRedirection(redirectionId);
-    await this.filterProducts();
+    this.getProductsList();
+  }
+
+  handlePageClick(event: any) {
+    this.setState({ page: event.nextSelectedPage + 1 }, () => {
+      this.getProductsList();
+    });
+  }
+
+  async getProductsList() {
+    await this.props.getProducts(this.state.page, this.state.searchText);
+    await this.props.updateProductsList(this.props.products);
   }
 
   filterProducts(e?: React.FormEvent<HTMLInputElement>) {
-    const text = e ? e.currentTarget.value : "";
-    const filteredProducts: ProductType[] =
-      this.getFilteredProductsForText(text);
-    this.props.updateProductsList(filteredProducts);
+    const searchText = e ? e.currentTarget.value : "";
+    this.setState({page: 1, searchText}, () => {
+      this.getProductsList();
+    });
   }
 
   getFilteredProductsForText(text: string) {
@@ -95,6 +119,7 @@ class RedirectionWithProducts extends Component<
   onSubmit = (formProps: IFormProps) => {
     const { redirectionId, updateManyProdsWithOneRedir } = this.props;
     const productListWithCommas = this.keysIntoArray(formProps);
+
     const productListWithDots = productListWithCommas.map((x) =>
       x.replace(",", ".")
     );
@@ -130,6 +155,7 @@ class RedirectionWithProducts extends Component<
 
   render() {
     const { handleSubmit, submitting, initRedirection } = this.props;
+    const pageCount = this.props.allProductsCount ? Math.ceil(this.props.allProductsCount / itemsPerPage) : 0;
     return (
       <div className="redir-with-prods-page">
         <h1 className="redir-with-prods-page__title">
@@ -161,6 +187,14 @@ class RedirectionWithProducts extends Component<
             {this.renderProductsList()}
           </div>
           <div className="alert">{this.renderAlert()}</div>
+          { pageCount > 1 && <ReactPaginate
+              className="pagination"
+              pageCount={pageCount}
+              forcePage={this.state.page - 1}
+              onClick={(e) => {
+                this.handlePageClick(e);
+              }}
+          />}
           <div className="order-buttons">
             <div className="order-buttons__row order-buttons__row--wide">
               <button
@@ -223,11 +257,13 @@ function mapStateToProps(state: StoreState) {
     prodsWithThisRedir,
     filteredProducts,
     products,
+    allProductsCount,
   } = state.wids;
   return {
     errorMessage,
     redirectionId,
     products,
+    allProductsCount,
     filteredProducts,
     initRedirection,
     prodsWithThisRedir,

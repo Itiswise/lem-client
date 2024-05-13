@@ -28,6 +28,7 @@ interface ILineProductChooserProps {
   getProduct: (productId?: string) => void;
   setMessage: (message: string) => SetMessageAction;
   getLines: () => void;
+  getProducts: (page?: number, search?: string) => void;
 }
 
 class LineProductChooser extends Component<
@@ -52,19 +53,20 @@ class LineProductChooser extends Component<
     return orders.length ? orders[0].partNumber : null;
   }
 
-  getIdForPartNumber(partNumber: string | null) {
+  async getIdForPartNumber(partNumber: string | null) {
+    await this.props.getProducts(1, partNumber ?? '');
     const filteredProducts = this.props.products.filter(
       (product) => product.partNumber === partNumber
     );
     return filteredProducts.length ? filteredProducts[0]._id : null;
   }
 
-  handleChange = (formProps: IFormProps) => {
+  handleChange = async (formProps: IFormProps) => {
     const { getProduct, setMessage, reset } = this.props;
     const line = formProps.target.value;
     const zk = this.getZkFromLine(line);
     const partNumber = this.getPartNumberFromZk(zk);
-    const id = this.getIdForPartNumber(partNumber);
+    const id = await this.getIdForPartNumber(partNumber);
 
     if (!zk) {
       setMessage(`line ${line} is not occupied at this very moment`);

@@ -264,3 +264,44 @@ em {
   max-height: calc(100vh - 200px);
   overflow: auto;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  user-select: none;
+
+  a {
+    display: block;
+    padding: 6px 10px;
+    border: 1px solid $disabled-color;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $disabled-color;
+    }
+  }
+
+  li.break a {
+    padding: 6px 0;
+    cursor: default;
+    background: none;
+    border: none;
+  }
+
+  li.selected a {
+    background-color: $accent-color;
+    color: white;
+    border-color: $accent-color;
+  }
+
+  li.disabled a {
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.8;
+  }
+}
