@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import {ActionTypes, CloseModalAction} from "../../actions";
+import {ActionTypes} from "../../actions";
 import { ROOT_URL, headers } from "../../config";
 
 export type DeletePartnumberAction = {
