@@ -166,7 +166,7 @@ class PartnumberAdd extends Component<
 
   render() {
     const { handleSubmit, submitting, initialValues } = this.props;
-    const { xlsxTactTime, partNumber } = initialValues;
+    const { xlsxTactTime} = initialValues;
 
     return (
       <div className="add-user-page">
