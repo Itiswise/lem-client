@@ -4,3 +4,5 @@ export * from "./openDeleteModal";
 export * from "./openDeleteRedirectionModal";
 export * from "./openDeleteProductModal";
 export * from "./openDeleteOrderFromStatsModal";
+export * from "./openDeletePartnumberModal";
+export * from "./setModalErrorMessage";

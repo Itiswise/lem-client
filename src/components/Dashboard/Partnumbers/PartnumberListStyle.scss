@@ -38,17 +38,17 @@
 
   &__header {
     display: flex;
-    width: calc(100vw - 610px);
+    width: calc(100vw - 810px);
     justify-content: flex-start;
     font-weight: 600;
     font-size: 0.9em;
 
     &__item {
-      width: 40%;
+      width: 15%;
       padding-left: 10px;
 
       &--first {
-        width: 800px;
+        width: 40%;
         padding-left: 10px;
       }
     }

@@ -13,16 +13,16 @@
 
   &__items {
     display: flex;
-    width: calc(100vw - 610px);
+    width: calc(100vw - 810px);
     justify-content: flex-start;
     align-items: center;
   }
 
   &__item {
-    width: 40%;
+    width: 15%;
 
     &--first {
-      width: 800px;
+      width: 40%;
     }
   }
   &__buttons {

@@ -48,6 +48,8 @@ import {
   OpenDeleteRedirectionModalAction,
   OpenDeleteProductModalAction,
   OpenDeleteOrderFromStatsModalAction,
+  OpenDeletePartnumberModalAction,
+  SetModalErrorMessageAction,
 } from "./modalActions";
 
 import {
@@ -89,6 +91,8 @@ import {
   GetUsersActionError,
   StartAddingUserAction,
   StartChangingPasswordAction,
+  AddPartnumberAction,
+  AddPartnumberActionError,
 } from "./dashboardActions";
 
 import {
@@ -131,7 +135,10 @@ import {
   SendProductsAction,
   UpdateManyProdsWithOneRedirAction,
   UpdateManyProdsWithOneRedirActionError,
+  DeletePartnumberAction,
+  DeletePartnumberActionError,
 } from "./widsActions";
+import {StartAddingPartnumberAction} from "./dashboardActions/startAddingPartnumber";
 
 export const UPDATE_MANY_PRODS_WITH_ONE_REDIR =
   "update_many_prods_with_one_redir";
@@ -268,6 +275,12 @@ export enum ActionTypes {
   LIST,
   VIEW,
   CONFIG,
+  ADD_PARTNUMBER,
+  ADD_PARTNUMBER_ERROR,
+  OPEN_DELETE_PARTNUMBER_MODAL,
+  DELETE_PARTNUMBER,
+  DELETE_PARTNUMBER_ERROR,
+  SET_MODAL_ERROR_MESSAGE,
 }
 
 export enum Tab {
@@ -331,7 +344,9 @@ export type ModalAction =
   | OpenDeleteModalAction
   | OpenDeleteRedirectionModalAction
   | OpenDeleteProductModalAction
-  | OpenDeleteOrderFromStatsModalAction;
+  | OpenDeleteOrderFromStatsModalAction
+  | OpenDeletePartnumberModalAction
+  | SetModalErrorMessageAction;
 
 export type DashboardAction =
   | ChooseSidebarTabAction
@@ -371,7 +386,10 @@ export type DashboardAction =
  | GetUsersSuccessAction
  | GetUsersActionError
  | StartAddingUserAction
- | StartChangingPasswordAction;
+ | StartChangingPasswordAction
+ | StartAddingPartnumberAction
+ | AddPartnumberAction
+ | AddPartnumberActionError;
 
 export type WidsAction =
   | GetRedirectionsAction
@@ -412,4 +430,6 @@ export type WidsAction =
   | SetMessageAction
   | SendProductsAction
   | UpdateManyProdsWithOneRedirAction
-  | UpdateManyProdsWithOneRedirActionError;
+  | UpdateManyProdsWithOneRedirActionError
+  | DeletePartnumberAction
+  | DeletePartnumberActionError;

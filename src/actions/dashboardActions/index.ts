@@ -21,3 +21,6 @@ export * from "./changePassword";
 export * from "./getUsers";
 export * from "./startAddingUser";
 export * from "./startChangingPassword";
+export * from "./startAddingPartnumber";
+export * from "./addPartnumber";
+

@@ -274,6 +274,12 @@ export const dashboardReducer = (
         partnumberDetails: action.payload,
       };
 
+    case ActionTypes.START_ADDING_PARTNUMBER:
+      return {
+        ...state,
+        activePartnumberComponent: ActionTypes.NEW,
+      };
+
     case ActionTypes.SAVE_PARTNUMBER:
       return {
         ...state,
@@ -281,6 +287,15 @@ export const dashboardReducer = (
       };
 
     case ActionTypes.SAVE_PARTNUMBER_ERROR:
+      return { ...state, isLoading: false, errorMessage: action.payload };
+
+    case ActionTypes.ADD_PARTNUMBER:
+      return {
+        ...state,
+        activePartnumberComponent: ActionTypes.LIST,
+      };
+
+    case ActionTypes.ADD_PARTNUMBER_ERROR:
       return { ...state, isLoading: false, errorMessage: action.payload };
 
     case ActionTypes.START_CHANGING_PASSWORD:

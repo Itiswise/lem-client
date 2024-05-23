@@ -6,6 +6,7 @@ import { ActionTypes } from "../../../actions/types";
 import { StoreState } from "../../../reducers";
 import PartnumberList from "./PartnumberList";
 import PartnumberEdit from "./PartnumberEdit";
+import PartnumberAdd from "./PartnumberAdd";
 import ConfigurePartnumbers from "./ConfigurePartnumbers";
 
 interface IPartnumberRouterProps {
@@ -15,6 +16,8 @@ interface IPartnumberRouterProps {
 class PartnumberRouter extends Component<IPartnumberRouterProps> {
   renderPartnumberComponent(activeComponent: ActionTypes) {
     switch (activeComponent) {
+      case ActionTypes.NEW:
+        return <PartnumberAdd />;
       case ActionTypes.EDIT:
         return <PartnumberEdit />;
       case ActionTypes.LIST:

@@ -22,3 +22,4 @@ export * from "./deleteConnectedRedirectionItem";
 export * from "./setMessage";
 export * from "./sendProducts";
 export * from "./updateManyProdsWithOneRedir";
+export * from "./deletePartnumber";

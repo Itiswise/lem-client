@@ -47,6 +47,11 @@
       padding: 20px;
     }
 
+    &__error {
+      font-weight: bold;
+      color: red;
+    }
+
     &__buttons {
       display: flex;
       justify-content: center;

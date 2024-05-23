@@ -14,10 +14,18 @@ interface IModalProps extends IModalState {
   deleteOrder: ({ orderNumber }: actions.IDeleteOrder) => void;
   deleteRedirection: (redirectionId?: string) => void;
   deleteProduct: (productId?: string) => void;
+  deletePartnumber: (partnumberId?: string) => void;
   callbackOnClose?: () => void;
+  errorMessage: string | undefined;
 }
 
 class Modal extends Component<IModalProps> {
+  componentDidMount() {
+      window.addEventListener("partnumberDeleted", () => {
+        this.props.closeModal();
+      });
+  }
+
   handleActionClick = () => {
     const { modalAction } = this.props;
     switch (modalAction) {
@@ -39,6 +47,10 @@ class Modal extends Component<IModalProps> {
 
       case "delete order":
         this.handleDeleteOrderFromStatsClick();
+        break;
+
+      case "delete partnumber":
+        this.handleDeletePartnumberClick();
         break;
 
       default:
@@ -77,12 +89,17 @@ class Modal extends Component<IModalProps> {
     closeModal();
   };
 
+  handleDeletePartnumberClick = () => {
+    const { partnumberId, deletePartnumber } = this.props;
+    deletePartnumber(partnumberId);
+  };
+
   handleCancelClick = () => {
     this.props.closeModal();
   };
 
   render() {
-    const { isModalOpened, modalHeader, modalContent, modalAction } =
+    const { isModalOpened, modalHeader, modalContent, modalAction, errorMessage } =
       this.props;
     return (
       <div
@@ -92,6 +109,7 @@ class Modal extends Component<IModalProps> {
         <div className="modal__card" onClick={(e) => e.stopPropagation()}>
           <div className="modal__card__header">{modalHeader}</div>
           <div className="modal__card__content">{modalContent}</div>
+          <div className="modal__card__error">{errorMessage}</div>
           <div className="modal__card__buttons">
             <button
               className={`btn ${
@@ -124,7 +142,9 @@ function mapStateToProps(state: StoreState) {
     modalAction: state.modal.modalAction,
     redirectionId: state.modal.redirectionId,
     productId: state.modal.productId,
+    partnumberId: state.modal.partnumberId,
     callbackOnClose: state.modal.callbackOnClose,
+    errorMessage: state.modal.errorMessage,
   };
 }
 export default connect(mapStateToProps, actions)(Modal);
