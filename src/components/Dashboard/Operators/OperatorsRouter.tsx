@@ -6,6 +6,7 @@ import { ActionTypes } from "../../../actions/types";
 import { StoreState } from "../../../reducers";
 import OperatorsList from "./OperatorsList";
 import AddOperator from "./AddOperator";
+import OperatorEdit from "./OperatorEdit";
 
 interface IOperatorsRouterProps {
     activeOperatorsComponent: ActionTypes;
@@ -21,6 +22,8 @@ class OperatorsRouter extends Component<IOperatorsRouterProps> {
         switch (activeComponent) {
             case ActionTypes.NEW:
                 return <AddOperator />;
+            case ActionTypes.EDIT:
+                return <OperatorEdit />;
             case ActionTypes.LIST:
                 return <OperatorsList />;
             default:

@@ -103,7 +103,11 @@ import {
   AddOperatorAction,
   AddOperatorActionError,
   DeleteOperatorAction,
-  DeleteOperatorActionError
+  DeleteOperatorActionError,
+  StartEditingOperatorAction,
+  EditOperatorBeginAction,
+  EditOperatorAction,
+  EditOperatorActionError,
 } from "./dashboardActions";
 
 import {
@@ -306,6 +310,11 @@ export enum ActionTypes {
   OPEN_DELETE_OPERATOR_MODAL,
   DELETE_OPERATOR,
   DELETE_OPERATOR_ERROR,
+
+  START_EDITING_OPERATOR,
+  EDIT_OPERATOR_BEGIN,
+  EDIT_OPERATOR,
+  EDIT_OPERATOR_ERROR,
 }
 
 export enum Tab {
@@ -426,7 +435,11 @@ export type DashboardAction =
  | AddOperatorAction
  | AddOperatorActionError
  | DeleteOperatorAction
- | DeleteOperatorActionError;
+ | DeleteOperatorActionError
+ | StartEditingOperatorAction
+ | EditOperatorBeginAction
+ | EditOperatorAction
+ | EditOperatorActionError;
 
 export type WidsAction =
   | GetRedirectionsAction

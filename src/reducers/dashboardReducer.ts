@@ -20,6 +20,7 @@ export interface IDashboardState {
   orders: OrderListType[];
   users: UserType[];
   operators: OperatorsListType[],
+  operatorDetails: OperatorsListType;
   partnumbers: PartnumberType[];
   filteredPartnumbers: PartnumberType[];
   orderDetails: OrderDetailsType;
@@ -52,6 +53,13 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
   userId: "",
   orders: [],
   operators: [],
+  operatorDetails: {
+    _id: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    __v: 0,
+  },
   partnumbers: [],
   users: [],
   givenTactTime: 0,
@@ -203,6 +211,35 @@ export const dashboardReducer = (
         ...state,
         errorMessage: action.payload,
       };
+
+    case ActionTypes.START_EDITING_OPERATOR:
+        return {
+            ...state,
+            activeOperatorComponent: ActionTypes.EDIT,
+            operatorDetails: action.payload,
+        };
+
+    case ActionTypes.EDIT_OPERATOR_BEGIN:
+        return {
+            ...state,
+            isLoading: true,
+            errorMessage: null,
+        }
+
+    case ActionTypes.EDIT_OPERATOR:
+        return {
+            ...state,
+            isLoading: false,
+            activeOperatorComponent: ActionTypes.LIST,
+            errorMessage: null,
+        }
+
+    case ActionTypes.EDIT_OPERATOR_ERROR:
+        return {
+            ...state,
+            errorMessage: action.payload,
+            isLoading: false,
+        }
 
     case ActionTypes.GET_ORDERS_ERROR:
       return {

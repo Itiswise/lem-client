@@ -5,7 +5,6 @@ import {OperatorsListType, StartAddingOperatorAction} from "../../../actions";
 import { StoreState } from "../../../reducers";
 import OperatorItem from "./OperatorItem";
 import ReactPaginate from 'react-paginate';
-import { itemsPerPage } from "../../../config";
 
 interface IOperatorsListProps {
     operators?: OperatorsListType[];
@@ -63,6 +62,7 @@ class OperatorsList extends Component<IOperatorsListProps, IOperatorsListState> 
                         firstname={operator.firstname}
                         lastname={operator.lastname}
                         email={operator.email}
+                        __v={operator.__v}
                     />)}
                 </div>
                 { pageCount > 1 && <ReactPaginate
