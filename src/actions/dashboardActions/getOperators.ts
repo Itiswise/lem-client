@@ -18,7 +18,13 @@ export type GetOperatorsBeginAction = {
 export type GetOperatorsSuccessAction = {
     type: ActionTypes.GET_OPERATORS_SUCCESS;
     payload: {
-        orders: OperatorsListType[];
+        data: OperatorsListType[];
+        pagination: {
+            total: number;
+            limit: number;
+            page: number;
+            totalPages: number;
+        }
     };
 };
 

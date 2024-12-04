@@ -32,10 +32,12 @@ export interface IDashboardState {
   activeOrderComponent: ActionTypes;
   activePartnumberComponent: ActionTypes;
   activeUserComponent: ActionTypes;
+  activeOperatorComponent: ActionTypes;
   isLoading: boolean;
   errorMessage: string;
   allPartnumbersCount: number;
   allOrdersCount: number;
+  allOperatorsCount: number;
 }
 
 const DASHBOARD_INITIAL_STATE: IDashboardState = {
@@ -43,6 +45,7 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
   activeOrderComponent: ActionTypes.LIST,
   activePartnumberComponent: ActionTypes.LIST,
   activeUserComponent: ActionTypes.LIST,
+  activeOperatorComponent: ActionTypes.LIST,
   liveView: [],
   _id: "",
   userId: "",
@@ -93,6 +96,7 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
   errorMessage: "",
   allPartnumbersCount: 0,
   allOrdersCount: 0,
+  allOperatorsCount: 0,
 };
 
 export const dashboardReducer = (
@@ -139,7 +143,8 @@ export const dashboardReducer = (
         return {
             ...state,
             isLoading: false,
-            operators: action.payload,
+            operators: action.payload.data,
+            allOperatorsCount: action.payload.pagination.totalPages,
             errorMessage: null,
         }
 

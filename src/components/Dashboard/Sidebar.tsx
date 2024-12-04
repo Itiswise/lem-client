@@ -48,6 +48,9 @@ class Sidebar extends Component<ISidebarProps> {
             <SidebarTab tab={Tab.ManagementUsers} text="users">
               <UserIcon />
             </SidebarTab>
+            <SidebarTab tab={Tab.ManagementOperators} text="operators">
+              <UserIcon />
+            </SidebarTab>
             <SidebarTab tab={Tab.ManagementCustomers} text="customers">
               <CustomerIcon />
             </SidebarTab>
