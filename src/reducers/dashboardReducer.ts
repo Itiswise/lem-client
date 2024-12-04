@@ -1,16 +1,16 @@
 import {
-  DashboardAction,
   ActionTypes,
-  OrderStatsType,
-  OrderListType,
-  OrderDetailsType,
-  PartnumberType,
-  PartnumberConfigType,
-  UserType,
-  Tab,
   ComputationsBase,
-  SourceOfTruth,
+  DashboardAction,
   OperatorsListType,
+  OrderDetailsType,
+  OrderListType,
+  OrderStatsType,
+  PartnumberConfigType,
+  PartnumberType,
+  SourceOfTruth,
+  Tab,
+  UserType,
 } from "../actions";
 
 export interface IDashboardState {
@@ -34,6 +34,7 @@ export interface IDashboardState {
   activeUserComponent: ActionTypes;
   activeOperatorComponent: ActionTypes;
   isLoading: boolean;
+  message?: string;
   errorMessage: string;
   allPartnumbersCount: number;
   allOrdersCount: number;
@@ -93,6 +94,7 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
     partNumber: "",
   },
   isLoading: false,
+  message: "",
   errorMessage: "",
   allPartnumbersCount: 0,
   allOrdersCount: 0,
@@ -188,6 +190,19 @@ export const dashboardReducer = (
             errorMessage: action.payload,
             isLoading: false,
         }
+
+    case ActionTypes.DELETE_OPERATOR:
+      return {
+        ...state,
+        message: action.payload,
+        operators: state.operators?.filter((o) => o._id !== action.payload),
+      };
+
+    case ActionTypes.DELETE_OPERATOR_ERROR:
+      return {
+        ...state,
+        errorMessage: action.payload,
+      };
 
     case ActionTypes.GET_ORDERS_ERROR:
       return {

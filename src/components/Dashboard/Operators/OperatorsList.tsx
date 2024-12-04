@@ -38,7 +38,7 @@ class OperatorsList extends Component<IOperatorsListProps, IOperatorsListState> 
     }
 
     render() {
-        const pageCount = this.props.allOperatorsCount ? Math.ceil(this.props.allOperatorsCount / itemsPerPage) : 0;
+        const pageCount = this.props.allOperatorsCount || 0;
 
         return (
             <div className="redirection-page">

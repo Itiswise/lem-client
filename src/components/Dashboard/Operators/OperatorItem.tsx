@@ -7,11 +7,12 @@ interface IOperatorItemProps {
     firstname: string;
     lastname: string;
     email: string;
+    openDeleteOperatorModal: ({ _id }: { _id: string }) => void;
 }
 
 class OperatorItem extends Component<IOperatorItemProps> {
     render() {
-        const { _id, firstname, lastname, email} = this.props;
+        const { _id, firstname, lastname, email, openDeleteOperatorModal} = this.props;
 
         return (
             <div className="redirection-row">
@@ -22,7 +23,14 @@ class OperatorItem extends Component<IOperatorItemProps> {
                 </div>
 
                 <div className="redirection-row__buttons">
-                    {/*TODO: Add operator row actions*/}
+                    <button
+                        className="btn btn--delete btn--thin"
+                        onClick={() => {
+                            openDeleteOperatorModal({ _id });
+                        }}
+                    >
+                        DELETE
+                    </button>
                 </div>
             </div>
         );

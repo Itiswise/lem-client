@@ -27,3 +27,4 @@ export * from "./getOperators";
 export * from "./addOperator";
 export * from "./startAddingOperator";
 export * from "./backToOperatorsList";
+export * from "./deleteOperator";

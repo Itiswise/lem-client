@@ -1,5 +1,5 @@
-import React, { Component, ElementType } from "react";
-import { reduxForm, Field, InjectedFormProps } from "redux-form";
+import React, { Component, ElementType, FC } from "react";
+import { reduxForm, Field, InjectedFormProps, WrappedFieldProps } from "redux-form";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
@@ -7,6 +7,31 @@ import * as actions from "../../../actions";
 import { IAddOperator, AddOperatorAction, AddOperatorBeginAction, AddOperatorActionError } from "../../../actions";
 import requireAuth from "../../requireAuth";
 import { StoreState } from "../../../reducers";
+
+interface RenderFieldProps {
+    label: string;
+    type: string;
+    htmlFor?: string;
+    required?: boolean;
+    autoComplete?: string;
+}
+
+const renderField:FC<RenderFieldProps & WrappedFieldProps> =
+    ({
+         input,
+         label,
+         type,
+         htmlFor,
+         required,
+         autoComplete,
+         meta: { touched, error, warning }
+    }) => (
+    <fieldset>
+        <label className="add-user-form__label" htmlFor={htmlFor}>{label}</label>
+        <input className="add-user-form__select" {...input} placeholder={label} type={type} required={required} autoComplete={autoComplete}/>
+        {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+    </fieldset>
+)
 
 interface IAddOperatorProps extends RouteComponentProps {
     errorMessage: string;
@@ -39,46 +64,33 @@ class AddOperator extends Component<InjectedFormProps<IAddOperator> & IAddOperat
                 </div>
                 <div style={{ display: 'flex', width: '100%', justifyContent: 'center', paddingTop: '64px' }}>
                     <form className="add-user-form" onSubmit={handleSubmit(this.onSubmit)}>
-                        <fieldset>
-                            <label className="add-user-form__label" htmlFor="firstname">
-                                First name
-                            </label>
-                            <Field
-                                className="add-user-form__select"
-                                name="firstname"
-                                type="text"
-                                component="input"
-                                required
-                            />
-                        </fieldset>
-                        <fieldset>
-                            <label className="add-user-form__label" htmlFor="lastname">
-                                Last name
-                            </label>
-                            <Field
-                                className="add-user-form__select"
-                                name="lastname"
-                                type="text"
-                                component="input"
-                                required
-                            />
-                        </fieldset>
-                        <fieldset>
-                            <label className="add-user-form__label" htmlFor="email">
-                                Email
-                            </label>
-                            <Field
-                                className="add-user-form__select"
-                                name="email"
-                                type="email"
-                                component="input"
-                                autoComplete="none"
-                                required
-                            />
-                        </fieldset>
-                        <div>{this.props.errorMessage}</div>
-
-                        <button className="btn btn--accent spacer" disabled={submitting}>
+                        <Field
+                            htmlFor="firstname"
+                            name="firstname"
+                            type="text"
+                            label="First name"
+                            component={renderField}
+                            required
+                        />
+                        <Field
+                            htmlFor="lastname"
+                            name="lastname"
+                            type="text"
+                            label="Last name"
+                            component={renderField}
+                            required
+                        />
+                        <Field
+                            htmlFor="email"
+                            name="email"
+                            type="email"
+                            label="Email"
+                            component={renderField}
+                            required
+                            autoComplete="none"
+                        />
+                        <div style={{ padding: '24px 0' }}>{this.props.errorMessage}</div>
+                        <button className="btn btn--accent" disabled={submitting}>
                             Add Operator
                         </button>
                     </form>
@@ -124,5 +136,5 @@ function mapStateToProps(state: StoreState) {
 
 export default compose(
     connect(mapStateToProps, actions),
-    reduxForm({ form: "addOperator", validate: validate })
+    reduxForm({ form: "addOperator", validate })
 )(requireAuth(withRouter(AddOperator))) as ElementType;

@@ -49,6 +49,7 @@ import {
   OpenDeleteProductModalAction,
   OpenDeleteOrderFromStatsModalAction,
   OpenDeletePartnumberModalAction,
+  OpenDeleteOperatorModalAction,
   SetModalErrorMessageAction,
 } from "./modalActions";
 
@@ -101,6 +102,8 @@ import {
   AddOperatorBeginAction,
   AddOperatorAction,
   AddOperatorActionError,
+  DeleteOperatorAction,
+  DeleteOperatorActionError
 } from "./dashboardActions";
 
 import {
@@ -299,6 +302,10 @@ export enum ActionTypes {
   ADD_OPERATOR_BEGIN,
   ADD_OPERATOR,
   ADD_OPERATOR_ERROR,
+
+  OPEN_DELETE_OPERATOR_MODAL,
+  DELETE_OPERATOR,
+  DELETE_OPERATOR_ERROR,
 }
 
 export enum Tab {
@@ -365,6 +372,7 @@ export type ModalAction =
   | OpenDeleteProductModalAction
   | OpenDeleteOrderFromStatsModalAction
   | OpenDeletePartnumberModalAction
+  | OpenDeleteOperatorModalAction
   | SetModalErrorMessageAction;
 
 export type DashboardAction =
@@ -416,7 +424,9 @@ export type DashboardAction =
  | StartAddingOperatorAction
  | AddOperatorBeginAction
  | AddOperatorAction
- | AddOperatorActionError;
+ | AddOperatorActionError
+ | DeleteOperatorAction
+ | DeleteOperatorActionError;
 
 export type WidsAction =
   | GetRedirectionsAction
