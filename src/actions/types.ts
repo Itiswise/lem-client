@@ -93,6 +93,9 @@ import {
   StartChangingPasswordAction,
   AddPartnumberAction,
   AddPartnumberActionError,
+  GetOperatorsBeginAction,
+  GetOperatorsSuccessAction,
+  GetOperatorsActionError,
 } from "./dashboardActions";
 
 import {
@@ -281,6 +284,10 @@ export enum ActionTypes {
   DELETE_PARTNUMBER,
   DELETE_PARTNUMBER_ERROR,
   SET_MODAL_ERROR_MESSAGE,
+
+  GET_OPERATORS_BEGIN,
+  GET_OPERATORS_SUCCESS,
+  GET_OPERATORS_ERROR,
 }
 
 export enum Tab {
@@ -295,6 +302,7 @@ export enum Tab {
   ManagementUsers,
   ManagementProducts,
   ManagementRedirections,
+  ManagementOperators,
 }
 
 export type AuthAction =
@@ -389,7 +397,10 @@ export type DashboardAction =
  | StartChangingPasswordAction
  | StartAddingPartnumberAction
  | AddPartnumberAction
- | AddPartnumberActionError;
+ | AddPartnumberActionError
+ | GetOperatorsBeginAction
+ | GetOperatorsSuccessAction
+ | GetOperatorsActionError;
 
 export type WidsAction =
   | GetRedirectionsAction

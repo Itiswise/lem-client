@@ -10,6 +10,7 @@ import {
   Tab,
   ComputationsBase,
   SourceOfTruth,
+  OperatorsListType,
 } from "../actions";
 
 export interface IDashboardState {
@@ -18,6 +19,7 @@ export interface IDashboardState {
   userId: string;
   orders: OrderListType[];
   users: UserType[];
+  operators: OperatorsListType[],
   partnumbers: PartnumberType[];
   filteredPartnumbers: PartnumberType[];
   orderDetails: OrderDetailsType;
@@ -45,6 +47,7 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
   _id: "",
   userId: "",
   orders: [],
+  operators: [],
   partnumbers: [],
   users: [],
   givenTactTime: 0,
@@ -124,6 +127,28 @@ export const dashboardReducer = (
         allOrdersCount: action.payload.allOrdersCount,
         errorMessage: null,
       };
+
+    case ActionTypes.GET_OPERATORS_BEGIN:
+      return {
+        ...state,
+        isLoading: true,
+        errorMessage: null,
+      }
+
+    case ActionTypes.GET_OPERATORS_SUCCESS:
+        return {
+            ...state,
+            isLoading: false,
+            operators: action.payload,
+            errorMessage: null,
+        }
+
+    case ActionTypes.GET_OPERATORS_ERROR:
+        return {
+            ...state,
+            errorMessage: action.payload,
+            isLoading: false,
+        }
 
     case ActionTypes.GET_ORDERS_ERROR:
       return {
