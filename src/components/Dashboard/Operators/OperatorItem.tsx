@@ -15,7 +15,7 @@ class OperatorItem extends Component<IOperatorItemProps> {
 
         return (
             <div className="redirection-row">
-                <div className="redirection-row__items">
+                <div className="redirection-row__items" style={{padding: '16px 0'}}>
                     <span className="redirection-row__item--first">{firstname}</span>
                     <span className="redirection-row__item">{lastname}</span>
                     <span className="redirection-row__item">{email}</span>

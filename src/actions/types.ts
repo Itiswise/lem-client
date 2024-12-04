@@ -96,6 +96,11 @@ import {
   GetOperatorsBeginAction,
   GetOperatorsSuccessAction,
   GetOperatorsActionError,
+  BackToOperatorsListAction,
+  StartAddingOperatorAction,
+  AddOperatorBeginAction,
+  AddOperatorAction,
+  AddOperatorActionError,
 } from "./dashboardActions";
 
 import {
@@ -288,6 +293,12 @@ export enum ActionTypes {
   GET_OPERATORS_BEGIN,
   GET_OPERATORS_SUCCESS,
   GET_OPERATORS_ERROR,
+
+  BACK_TO_OPERATORS_LIST,
+  START_ADDING_OPERATOR,
+  ADD_OPERATOR_BEGIN,
+  ADD_OPERATOR,
+  ADD_OPERATOR_ERROR,
 }
 
 export enum Tab {
@@ -400,7 +411,12 @@ export type DashboardAction =
  | AddPartnumberActionError
  | GetOperatorsBeginAction
  | GetOperatorsSuccessAction
- | GetOperatorsActionError;
+ | GetOperatorsActionError
+ | BackToOperatorsListAction
+ | StartAddingOperatorAction
+ | AddOperatorBeginAction
+ | AddOperatorAction
+ | AddOperatorActionError;
 
 export type WidsAction =
   | GetRedirectionsAction

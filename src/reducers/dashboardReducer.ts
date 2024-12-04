@@ -155,6 +155,40 @@ export const dashboardReducer = (
             isLoading: false,
         }
 
+    case ActionTypes.BACK_TO_OPERATORS_LIST:
+        return {
+            ...state,
+            activeOperatorComponent: ActionTypes.LIST,
+        };
+
+    case ActionTypes.START_ADDING_OPERATOR:
+        return {
+            ...state,
+            activeOperatorComponent: ActionTypes.NEW,
+        };
+
+    case ActionTypes.ADD_OPERATOR_BEGIN:
+        return {
+          ...state,
+          isLoading: true,
+          errorMessage: null,
+        }
+
+    case ActionTypes.ADD_OPERATOR:
+        return {
+          ...state,
+          isLoading: false,
+          activeOperatorComponent: ActionTypes.LIST,
+          errorMessage: null,
+        }
+
+    case ActionTypes.ADD_OPERATOR_ERROR:
+        return {
+            ...state,
+            errorMessage: action.payload,
+            isLoading: false,
+        }
+
     case ActionTypes.GET_ORDERS_ERROR:
       return {
         ...state,

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../../../actions";
-import { OperatorsListType } from "../../../actions";
+import {OperatorsListType, StartAddingOperatorAction} from "../../../actions";
 import { StoreState } from "../../../reducers";
 import OperatorItem from "./OperatorItem";
 import ReactPaginate from 'react-paginate';
@@ -9,6 +9,7 @@ import { itemsPerPage } from "../../../config";
 
 interface IOperatorsListProps {
     operators?: OperatorsListType[];
+    startAddingOperator: () => StartAddingOperatorAction;
     allOperatorsCount?: number;
     getOperators: (page?: number) => void;
 }
@@ -43,7 +44,12 @@ class OperatorsList extends Component<IOperatorsListProps, IOperatorsListState> 
             <div className="redirection-page">
                 <div className="redirection-page__header">
                     <h1 className="main-page__title">Operators List</h1>
-                    {/*TODO: Add header create operator action*/}
+                    <button
+                        className="btn btn--accent"
+                        onClick={this.props.startAddingOperator}
+                    >
+                        ADD OPERATOR
+                    </button>
                 </div>
                 <div className="redirections-list__header">
                     <span className="redirections-list__header__item--first">firstname</span>
