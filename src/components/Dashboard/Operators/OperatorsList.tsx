@@ -4,7 +4,6 @@ import * as actions from "../../../actions";
 import { OperatorsListType } from "../../../actions";
 import { StoreState } from "../../../reducers";
 import OperatorItem from "./OperatorItem";
-import "./OperatorsListStyle.scss";
 import ReactPaginate from 'react-paginate';
 import { itemsPerPage } from "../../../config";
 
@@ -41,19 +40,23 @@ class OperatorsList extends Component<IOperatorsListProps, IOperatorsListState> 
         const pageCount = this.props.allOperatorsCount ? Math.ceil(this.props.allOperatorsCount / itemsPerPage) : 0;
 
         return (
-            <div className="operator-page">
-                <div className="operator-page__header">
+            <div className="redirection-page">
+                <div className="redirection-page__header">
+                    <h1 className="main-page__title">Operators List</h1>
                     {/*TODO: Add header create operator action*/}
                 </div>
-                <div className="operators-list__header">
-                    <span className="operators-list__header__item--first">operators</span>
+                <div className="redirections-list__header">
+                    <span className="redirections-list__header__item--first">firstname</span>
+                    <span className="redirections-list__header__item">lastname</span>
+                    <span className="redirections-list__header__item">email</span>
                 </div>
-                <div className="operators-list">
+                <div className="redirections-list">
                     { this.props.operators && this.props.operators.map((operator) => <OperatorItem
                         key={operator._id}
                         _id={operator._id}
                         firstname={operator.firstname}
                         lastname={operator.lastname}
+                        email={operator.email}
                     />)}
                 </div>
                 { pageCount > 1 && <ReactPaginate
