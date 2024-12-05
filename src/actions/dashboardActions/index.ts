@@ -23,4 +23,10 @@ export * from "./startAddingUser";
 export * from "./startChangingPassword";
 export * from "./startAddingPartnumber";
 export * from "./addPartnumber";
-
+export * from "./getOperators";
+export * from "./addOperator";
+export * from "./startAddingOperator";
+export * from "./backToOperatorsList";
+export * from "./deleteOperator";
+export * from "./startEditingOperator";
+export * from "./editOperator";

@@ -11,6 +11,7 @@ import AnalyticsLiveView from "./AnalyticsLiveView";
 import ManagementCustomers from "./ManagementCustomers";
 import ManagementLines from "./ManagementLines";
 import ManagementOrders from "./ManagementOrders";
+import ManagementOperators from "./ManagementOperators";
 import ManagementTactTimes from "./ManagementTactTimes";
 import ManagementUsers from "./ManagementUsers";
 import ManagementProducts from "./ManagementProducts";
@@ -27,6 +28,7 @@ interface IMainPageProps {
   ManagementCustomers: ElementType;
   ManagementLines: ElementType;
   ManagementOrders: ElementType;
+  ManagementOperators: ElementType;
   ManagementTactTimes: ElementType;
   ManagementUsers: ElementType;
   ManagementProducts: ElementType;
@@ -45,6 +47,7 @@ class Main extends Component<IMainPageProps> {
       ManagementOrders,
       ManagementTactTimes,
       ManagementUsers,
+      ManagementOperators,
       ManagementProducts,
       ManagementRedirections,
     } = this.props;
@@ -67,6 +70,8 @@ class Main extends Component<IMainPageProps> {
         return <ManagementTactTimes />;
       case Tab.ManagementUsers:
         return <ManagementUsers />;
+      case Tab.ManagementOperators:
+        return <ManagementOperators />;
       case Tab.ManagementProducts:
         return <ManagementProducts />;
       case Tab.ManagementRedirections:
@@ -94,6 +99,7 @@ function mapStateToProps(state: StoreState) {
     ManagementOrders,
     ManagementTactTimes,
     ManagementUsers,
+    ManagementOperators,
     ManagementProducts,
     ManagementRedirections,
   };

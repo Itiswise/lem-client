@@ -49,6 +49,7 @@ import {
   OpenDeleteProductModalAction,
   OpenDeleteOrderFromStatsModalAction,
   OpenDeletePartnumberModalAction,
+  OpenDeleteOperatorModalAction,
   SetModalErrorMessageAction,
 } from "./modalActions";
 
@@ -93,6 +94,20 @@ import {
   StartChangingPasswordAction,
   AddPartnumberAction,
   AddPartnumberActionError,
+  GetOperatorsBeginAction,
+  GetOperatorsSuccessAction,
+  GetOperatorsActionError,
+  BackToOperatorsListAction,
+  StartAddingOperatorAction,
+  AddOperatorBeginAction,
+  AddOperatorAction,
+  AddOperatorActionError,
+  DeleteOperatorAction,
+  DeleteOperatorActionError,
+  StartEditingOperatorAction,
+  EditOperatorBeginAction,
+  EditOperatorAction,
+  EditOperatorActionError,
 } from "./dashboardActions";
 
 import {
@@ -281,6 +296,25 @@ export enum ActionTypes {
   DELETE_PARTNUMBER,
   DELETE_PARTNUMBER_ERROR,
   SET_MODAL_ERROR_MESSAGE,
+
+  GET_OPERATORS_BEGIN,
+  GET_OPERATORS_SUCCESS,
+  GET_OPERATORS_ERROR,
+
+  BACK_TO_OPERATORS_LIST,
+  START_ADDING_OPERATOR,
+  ADD_OPERATOR_BEGIN,
+  ADD_OPERATOR,
+  ADD_OPERATOR_ERROR,
+
+  OPEN_DELETE_OPERATOR_MODAL,
+  DELETE_OPERATOR,
+  DELETE_OPERATOR_ERROR,
+
+  START_EDITING_OPERATOR,
+  EDIT_OPERATOR_BEGIN,
+  EDIT_OPERATOR,
+  EDIT_OPERATOR_ERROR,
 }
 
 export enum Tab {
@@ -295,6 +329,7 @@ export enum Tab {
   ManagementUsers,
   ManagementProducts,
   ManagementRedirections,
+  ManagementOperators,
 }
 
 export type AuthAction =
@@ -346,6 +381,7 @@ export type ModalAction =
   | OpenDeleteProductModalAction
   | OpenDeleteOrderFromStatsModalAction
   | OpenDeletePartnumberModalAction
+  | OpenDeleteOperatorModalAction
   | SetModalErrorMessageAction;
 
 export type DashboardAction =
@@ -389,7 +425,21 @@ export type DashboardAction =
  | StartChangingPasswordAction
  | StartAddingPartnumberAction
  | AddPartnumberAction
- | AddPartnumberActionError;
+ | AddPartnumberActionError
+ | GetOperatorsBeginAction
+ | GetOperatorsSuccessAction
+ | GetOperatorsActionError
+ | BackToOperatorsListAction
+ | StartAddingOperatorAction
+ | AddOperatorBeginAction
+ | AddOperatorAction
+ | AddOperatorActionError
+ | DeleteOperatorAction
+ | DeleteOperatorActionError
+ | StartEditingOperatorAction
+ | EditOperatorBeginAction
+ | EditOperatorAction
+ | EditOperatorActionError;
 
 export type WidsAction =
   | GetRedirectionsAction

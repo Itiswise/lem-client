@@ -1,15 +1,16 @@
 import {
-  DashboardAction,
   ActionTypes,
-  OrderStatsType,
-  OrderListType,
-  OrderDetailsType,
-  PartnumberType,
-  PartnumberConfigType,
-  UserType,
-  Tab,
   ComputationsBase,
+  DashboardAction,
+  OperatorsListType,
+  OrderDetailsType,
+  OrderListType,
+  OrderStatsType,
+  PartnumberConfigType,
+  PartnumberType,
   SourceOfTruth,
+  Tab,
+  UserType,
 } from "../actions";
 
 export interface IDashboardState {
@@ -18,6 +19,8 @@ export interface IDashboardState {
   userId: string;
   orders: OrderListType[];
   users: UserType[];
+  operators: OperatorsListType[],
+  operatorDetails: OperatorsListType;
   partnumbers: PartnumberType[];
   filteredPartnumbers: PartnumberType[];
   orderDetails: OrderDetailsType;
@@ -30,10 +33,13 @@ export interface IDashboardState {
   activeOrderComponent: ActionTypes;
   activePartnumberComponent: ActionTypes;
   activeUserComponent: ActionTypes;
+  activeOperatorComponent: ActionTypes;
   isLoading: boolean;
+  message?: string;
   errorMessage: string;
   allPartnumbersCount: number;
   allOrdersCount: number;
+  allOperatorsCount: number;
 }
 
 const DASHBOARD_INITIAL_STATE: IDashboardState = {
@@ -41,10 +47,19 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
   activeOrderComponent: ActionTypes.LIST,
   activePartnumberComponent: ActionTypes.LIST,
   activeUserComponent: ActionTypes.LIST,
+  activeOperatorComponent: ActionTypes.LIST,
   liveView: [],
   _id: "",
   userId: "",
   orders: [],
+  operators: [],
+  operatorDetails: {
+    _id: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    __v: 0,
+  },
   partnumbers: [],
   users: [],
   givenTactTime: 0,
@@ -87,9 +102,11 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
     partNumber: "",
   },
   isLoading: false,
+  message: "",
   errorMessage: "",
   allPartnumbersCount: 0,
   allOrdersCount: 0,
+  allOperatorsCount: 0,
 };
 
 export const dashboardReducer = (
@@ -124,6 +141,105 @@ export const dashboardReducer = (
         allOrdersCount: action.payload.allOrdersCount,
         errorMessage: null,
       };
+
+    case ActionTypes.GET_OPERATORS_BEGIN:
+      return {
+        ...state,
+        isLoading: true,
+        errorMessage: null,
+      }
+
+    case ActionTypes.GET_OPERATORS_SUCCESS:
+        return {
+            ...state,
+            isLoading: false,
+            operators: action.payload.data,
+            allOperatorsCount: action.payload.pagination.totalPages,
+            errorMessage: null,
+        }
+
+    case ActionTypes.GET_OPERATORS_ERROR:
+        return {
+            ...state,
+            errorMessage: action.payload,
+            isLoading: false,
+        }
+
+    case ActionTypes.BACK_TO_OPERATORS_LIST:
+        return {
+            ...state,
+            activeOperatorComponent: ActionTypes.LIST,
+        };
+
+    case ActionTypes.START_ADDING_OPERATOR:
+        return {
+            ...state,
+            activeOperatorComponent: ActionTypes.NEW,
+        };
+
+    case ActionTypes.ADD_OPERATOR_BEGIN:
+        return {
+          ...state,
+          isLoading: true,
+          errorMessage: null,
+        }
+
+    case ActionTypes.ADD_OPERATOR:
+        return {
+          ...state,
+          isLoading: false,
+          activeOperatorComponent: ActionTypes.LIST,
+          errorMessage: null,
+        }
+
+    case ActionTypes.ADD_OPERATOR_ERROR:
+        return {
+            ...state,
+            errorMessage: action.payload,
+            isLoading: false,
+        }
+
+    case ActionTypes.DELETE_OPERATOR:
+      return {
+        ...state,
+        message: action.payload,
+        operators: state.operators?.filter((o) => o._id !== action.payload),
+      };
+
+    case ActionTypes.DELETE_OPERATOR_ERROR:
+      return {
+        ...state,
+        errorMessage: action.payload,
+      };
+
+    case ActionTypes.START_EDITING_OPERATOR:
+        return {
+            ...state,
+            activeOperatorComponent: ActionTypes.EDIT,
+            operatorDetails: action.payload,
+        };
+
+    case ActionTypes.EDIT_OPERATOR_BEGIN:
+        return {
+            ...state,
+            isLoading: true,
+            errorMessage: null,
+        }
+
+    case ActionTypes.EDIT_OPERATOR:
+        return {
+            ...state,
+            isLoading: false,
+            activeOperatorComponent: ActionTypes.LIST,
+            errorMessage: null,
+        }
+
+    case ActionTypes.EDIT_OPERATOR_ERROR:
+        return {
+            ...state,
+            errorMessage: action.payload,
+            isLoading: false,
+        }
 
     case ActionTypes.GET_ORDERS_ERROR:
       return {

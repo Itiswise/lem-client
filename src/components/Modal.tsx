@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 
 import * as actions from "../actions";
-import { StoreState } from "../reducers";
-import { IModalState } from "../reducers/modalReducer";
+import {StoreState} from "../reducers";
+import {IModalState} from "../reducers/modalReducer";
 import "./ModalStyle.scss";
 
 interface IModalProps extends IModalState {
@@ -14,6 +14,7 @@ interface IModalProps extends IModalState {
   deleteOrder: ({ orderNumber }: actions.IDeleteOrder) => void;
   deleteRedirection: (redirectionId?: string) => void;
   deleteProduct: (productId?: string) => void;
+  deleteOperator: (operatorId?: string) => void;
   deletePartnumber: (partnumberId?: string) => void;
   callbackOnClose?: () => void;
   errorMessage: string | undefined;
@@ -51,6 +52,10 @@ class Modal extends Component<IModalProps> {
 
       case "delete partnumber":
         this.handleDeletePartnumberClick();
+        break;
+
+      case "delete operator":
+        this.handleDeleteOperatorClick();
         break;
 
       default:
@@ -92,6 +97,12 @@ class Modal extends Component<IModalProps> {
   handleDeletePartnumberClick = () => {
     const { partnumberId, deletePartnumber } = this.props;
     deletePartnumber(partnumberId);
+  };
+
+  handleDeleteOperatorClick = () => {
+    const { operatorId, deleteOperator, closeModal } = this.props;
+    deleteOperator(operatorId);
+    closeModal();
   };
 
   handleCancelClick = () => {
@@ -143,6 +154,7 @@ function mapStateToProps(state: StoreState) {
     redirectionId: state.modal.redirectionId,
     productId: state.modal.productId,
     partnumberId: state.modal.partnumberId,
+    operatorId: state.modal.operatorId,
     callbackOnClose: state.modal.callbackOnClose,
     errorMessage: state.modal.errorMessage,
   };
