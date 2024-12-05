@@ -3,6 +3,11 @@ import { Dispatch } from "redux";
 import { ActionTypes } from "../../actions";
 import { ROOT_URL, headers } from "../../config";
 
+export interface operatorsAttr {
+  position: 'Position 1' | 'Position 2' | 'Position 3';
+  operator: string | null;
+}
+
 export interface ICreateOrder {
   orderNumber: string;
   quantity: number;
@@ -11,6 +16,7 @@ export interface ICreateOrder {
   customer: string;
   orderStatus?: string;
   orderAddedAt?: string;
+  operators?: [operatorsAttr, operatorsAttr, operatorsAttr];
 }
 
 export type OrderType = {
@@ -37,6 +43,7 @@ export type OrderType = {
     _line?: string;
     _user?: string;
   }[];
+  operators?: [operatorsAttr, operatorsAttr, operatorsAttr];
 };
 
 export type CreateOrderAction = {
@@ -50,7 +57,7 @@ export type CreateOrderActionError = {
 };
 
 export const createOrder =
-  ({ orderNumber, quantity, partNumber, qrCode, customer }: ICreateOrder) =>
+  ({ orderNumber, quantity, partNumber, qrCode, customer, operators }: ICreateOrder) =>
   async (dispatch: Dispatch) => {
     try {
       const resp = await axios.post(
@@ -74,6 +81,7 @@ export const createOrder =
           qrCode,
           tactTime,
           customer,
+          operators,
         },
         {
           headers,

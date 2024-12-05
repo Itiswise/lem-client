@@ -35,6 +35,7 @@ interface IOrderButtonsProps {
     partNumber,
     qrCode,
     customer,
+    operators,
   }: ICreateOrder) => void;
   addBreakStart: ({ orderNumber, _line }: IAddBreakStart) => void;
   pauseOrder: () => PauseOrderAction;
@@ -42,6 +43,7 @@ interface IOrderButtonsProps {
   resumeOrder: () => ResumeOrderAction;
   openFinishModal: () => OpenFinishModalAction;
   openDeleteModal: () => OpenDeleteModalAction;
+  openOperatorModal: ({ orderNumber }: { orderNumber: string }) => void;
 }
 
 class OrderButtons extends Component<IOrderButtonsProps> {
@@ -82,6 +84,11 @@ class OrderButtons extends Component<IOrderButtonsProps> {
     } else return false;
   }
 
+  handleOperatorModal() {
+    const { orderNumber, openOperatorModal } = this.props;
+    orderNumber && openOperatorModal({ orderNumber });
+  }
+
   createNewOrder() {
     if (this.props.menu) {
       const orders = this.props.menu.menuContent;
@@ -92,7 +99,7 @@ class OrderButtons extends Component<IOrderButtonsProps> {
 
       const details = filteredOrders[0];
 
-      const { orderNumber, quantity, partNumber, qrCode, customer } = details;
+      const { orderNumber, quantity, partNumber, qrCode, customer, } = details;
 
       const orderInfo = {
         orderNumber,
@@ -119,7 +126,9 @@ class OrderButtons extends Component<IOrderButtonsProps> {
   }
 
   handleStartClick = () => {
-    this.createNewOrder();
+    // this.createNewOrder();
+    this.handleOperatorModal();
+    // TODO: Add functionality to start order based on selected position and operator (update order with operator info)
   };
 
   handlePauseClick = () => {
@@ -127,7 +136,9 @@ class OrderButtons extends Component<IOrderButtonsProps> {
   };
 
   handleResumeClick = () => {
-    this.endCurrentBreak();
+    // this.endCurrentBreak();
+    this.handleOperatorModal();
+    // TODO: Add functionality to resume order based on selected position and operator (update order with operator info)
   };
 
   handleFinishClick = () => {

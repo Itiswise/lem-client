@@ -1,4 +1,4 @@
-import { ModalAction, ActionTypes } from "../actions";
+import {ActionTypes, ModalAction} from "../actions";
 
 export interface IModalState {
   isModalOpened?: boolean;
@@ -12,11 +12,13 @@ export interface IModalState {
     | "delete order"
     | "delete partnumber"
     | "delete operator"
+    | "accept operator"
     | "";
   redirectionId?: string;
   productId?: string;
   partnumberId?: string;
   operatorId?: string;
+  orderNumber?: string | null;
   callbackOnClose?: () => void;
   errorMessage?: string;
 }
@@ -30,6 +32,7 @@ const MODAL_INITIAL_STATE: IModalState = {
   productId: "",
   partnumberId: "",
   operatorId: "",
+  orderNumber: "",
   errorMessage: "",
 };
 
@@ -124,6 +127,16 @@ export const modalReducer = (
                  smash the “YES…” button`,
         modalAction: "delete operator",
         operatorId: action.payload,
+      };
+
+    case ActionTypes.OPEN_OPERATOR_MODAL:
+      return {
+        ...state,
+        isModalOpened: true,
+        modalHeader: "Pick an operator for this order",
+        modalContent: ``,
+        modalAction: "accept operator",
+        orderNumber: action.payload,
       };
 
     case ActionTypes.SET_MODAL_ERROR_MESSAGE:

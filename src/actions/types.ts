@@ -39,6 +39,10 @@ import {
   PauseOrderAction,
   ResumeOrderAction,
   SetOrderPauseStatusAction,
+  GetScannerOperatorsAction,
+  GetScannerOperatorsActionError,
+  PickOperatorAction,
+  PickPositionAction,
 } from "./scannerActions";
 
 import {
@@ -50,6 +54,7 @@ import {
   OpenDeleteOrderFromStatsModalAction,
   OpenDeletePartnumberModalAction,
   OpenDeleteOperatorModalAction,
+  OpenOperatorModalAction,
   SetModalErrorMessageAction,
 } from "./modalActions";
 
@@ -315,6 +320,12 @@ export enum ActionTypes {
   EDIT_OPERATOR_BEGIN,
   EDIT_OPERATOR,
   EDIT_OPERATOR_ERROR,
+
+  OPEN_OPERATOR_MODAL,
+  GET_SCANNER_OPERATORS_LIST,
+  GET_SCANNER_OPERATORS_LIST_ERROR,
+  PICK_OPERATOR,
+  PICK_POSITION,
 }
 
 export enum Tab {
@@ -371,7 +382,11 @@ export type ScannerAction =
   | AddBreakEndActionError
   | PauseOrderAction
   | ResumeOrderAction
-  | SetOrderPauseStatusAction;
+  | SetOrderPauseStatusAction
+  | GetScannerOperatorsAction
+  | GetScannerOperatorsActionError
+  | PickOperatorAction
+  | PickPositionAction;
 
 export type ModalAction =
   | OpenFinishModalAction
@@ -382,6 +397,7 @@ export type ModalAction =
   | OpenDeleteOrderFromStatsModalAction
   | OpenDeletePartnumberModalAction
   | OpenDeleteOperatorModalAction
+  | OpenOperatorModalAction
   | SetModalErrorMessageAction;
 
 export type DashboardAction =

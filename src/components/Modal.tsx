@@ -5,9 +5,10 @@ import * as actions from "../actions";
 import {StoreState} from "../reducers";
 import {IModalState} from "../reducers/modalReducer";
 import "./ModalStyle.scss";
+import OperatorPicker from "./Scanner/modal/OperatorPicker";
 
 interface IModalProps extends IModalState {
-  orderNumber: string | null;
+  orderNumber?: string | null;
   orderNumberFromStats: string | null;
   closeModal: (callbackOnClose?: () => void) => actions.CloseModalAction;
   closeOrder: ({ orderNumber }: actions.ICloseOrder) => void;
@@ -58,6 +59,10 @@ class Modal extends Component<IModalProps> {
         this.handleDeleteOperatorClick();
         break;
 
+      case "accept operator":
+        this.handleAcceptOperatorClick();
+        break;
+
       default:
         return;
     }
@@ -105,6 +110,12 @@ class Modal extends Component<IModalProps> {
     closeModal();
   };
 
+  handleAcceptOperatorClick = () => {
+    const { orderNumber, closeModal } = this.props;
+    console.log(orderNumber);
+    closeModal();
+  };
+
   handleCancelClick = () => {
     this.props.closeModal();
   };
@@ -117,10 +128,17 @@ class Modal extends Component<IModalProps> {
         className={`modal ${isModalOpened ? "modal--active" : ""}`}
         onClick={this.handleCancelClick}
       >
-        <div className="modal__card" onClick={(e) => e.stopPropagation()}>
+        <div className="modal__card" onClick={(e) => e.stopPropagation()}
+             style={modalAction === 'accept operator' ? {height: 'fit-content'} : {}}>
           <div className="modal__card__header">{modalHeader}</div>
-          <div className="modal__card__content">{modalContent}</div>
-          <div className="modal__card__error">{errorMessage}</div>
+          {modalAction === 'accept operator' ? (
+              <OperatorPicker errorMessage={errorMessage} />
+          ) : (
+              <>
+              <div className="modal__card__content">{modalContent}</div>
+              <div className="modal__card__error">{errorMessage}</div>
+              </>
+          )}
           <div className="modal__card__buttons">
             <button
               className={`btn ${
