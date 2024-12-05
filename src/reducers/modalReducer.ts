@@ -11,10 +11,12 @@ export interface IModalState {
     | "delete product"
     | "delete order"
     | "delete partnumber"
+    | "delete operator"
     | "";
   redirectionId?: string;
   productId?: string;
   partnumberId?: string;
+  operatorId?: string;
   callbackOnClose?: () => void;
   errorMessage?: string;
 }
@@ -27,6 +29,7 @@ const MODAL_INITIAL_STATE: IModalState = {
   redirectionId: "",
   productId: "",
   partnumberId: "",
+  operatorId: "",
   errorMessage: "",
 };
 
@@ -110,6 +113,17 @@ export const modalReducer = (
                  smash the “YES…” button`,
         modalAction: "delete partnumber",
         partnumberId: action.payload,
+      };
+
+    case ActionTypes.OPEN_DELETE_OPERATOR_MODAL:
+      return {
+        ...state,
+        isModalOpened: true,
+        modalHeader: "Are you sure you want to delete this operator?",
+        modalContent: `It can't be undone! So, if you are really 100% sure,
+                 smash the “YES…” button`,
+        modalAction: "delete operator",
+        operatorId: action.payload,
       };
 
     case ActionTypes.SET_MODAL_ERROR_MESSAGE:
