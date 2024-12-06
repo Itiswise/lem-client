@@ -8,3 +8,4 @@ export * from "./openDeletePartnumberModal";
 export * from "./setModalErrorMessage";
 export * from "./openDeleteOperatorModal";
 export * from "./openOperatorModal";
+export * from "./openResumeOperatorModal";

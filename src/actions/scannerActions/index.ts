@@ -18,5 +18,5 @@ export * from "./setOrderPauseStatus";
 export * from "./pauseOrder";
 export * from "./resumeOrder";
 export * from "./getOperators";
-export * from "./pickOperator";
-export * from "./pickPosition";
+export * from "./pickOperators";
+export * from "./updateOrderOperators";

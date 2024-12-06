@@ -3,6 +3,7 @@ import {
   HourlyRatesType,
   LineType,
   MenuDataType,
+  operatorsAttr,
   OperatorsListType,
   OrderStatisticsType,
   OrderType,
@@ -20,8 +21,7 @@ export interface IScannerState {
   userId: string;
   userEmail: string;
   pickedOrder: string;
-  pickedOperator: string;
-  pickedPosition: IPosition;
+  pickedOperators: [operatorsAttr, operatorsAttr, operatorsAttr];
   menu: MenuDataType;
   pickedLine: string;
   deleteMessage: string;
@@ -46,8 +46,10 @@ const SCANNER_INITIAL_STATE: IScannerState = {
   userId: "",
   userEmail: "",
   pickedOrder: "",
-  pickedOperator: "",
-  pickedPosition: positions[0],
+  pickedOperators: positions.map((pos) => ({
+    position: pos.value,
+    operator: null,
+  })) as [operatorsAttr, operatorsAttr, operatorsAttr],
   menu: {
     menuContent: [
       {
@@ -200,17 +202,28 @@ export const scannerReducer = (
         errorMessage: "",
       }
 
-    case ActionTypes.PICK_OPERATOR:
+    case ActionTypes.PICK_OPERATORS:
       return {
         ...state,
-        pickedOperator: action.payload,
+        pickedOperators: action.payload,
+        existingOrder: {
+          ...state.existingOrder,
+          operators: action.payload,
+        }
       };
 
-    case ActionTypes.PICK_POSITION:
+    case ActionTypes.UPDATE_ORDER_OPERATORS:
       return {
         ...state,
-        pickedPosition: action.payload,
+        existingOrder: {
+          ...state.existingOrder,
+          operators: action.payload,
+        },
+        pickedOperators: action.payload,
       };
+
+    case ActionTypes.UPDATE_ORDER_OPERATORS_ERROR:
+      return {...state, errorMessage: action.payload};
 
     case ActionTypes.PICK_LINE_ERROR:
       return { ...state, errorMessage: "" };

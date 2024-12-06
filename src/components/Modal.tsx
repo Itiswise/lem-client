@@ -1,14 +1,15 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-
 import * as actions from "../actions";
 import {StoreState} from "../reducers";
 import {IModalState} from "../reducers/modalReducer";
 import "./ModalStyle.scss";
 import OperatorPicker from "./Scanner/modal/OperatorPicker";
+import {IAddBreakEnd, ICreateOrder, MenuDataType, operatorsAttr, ResumeOrderAction} from "../actions";
 
 interface IModalProps extends IModalState {
   orderNumber?: string | null;
+  _line?: string | null;
   orderNumberFromStats: string | null;
   closeModal: (callbackOnClose?: () => void) => actions.CloseModalAction;
   closeOrder: ({ orderNumber }: actions.ICloseOrder) => void;
@@ -19,6 +20,19 @@ interface IModalProps extends IModalState {
   deletePartnumber: (partnumberId?: string) => void;
   callbackOnClose?: () => void;
   errorMessage: string | undefined;
+  operators: [operatorsAttr, operatorsAttr, operatorsAttr];
+  menu: MenuDataType;
+  createOrder: ({
+    orderNumber,
+    quantity,
+    partNumber,
+    qrCode,
+    customer,
+    operators,
+  }: ICreateOrder) => void;
+  addBreakEnd: ({ orderNumber, _line }: IAddBreakEnd) => void;
+  resumeOrder: () => ResumeOrderAction
+  updateOrderOperators: (orderNumber: string, operators: [operatorsAttr, operatorsAttr, operatorsAttr]) => void;
 }
 
 class Modal extends Component<IModalProps> {
@@ -61,6 +75,10 @@ class Modal extends Component<IModalProps> {
 
       case "accept operator":
         this.handleAcceptOperatorClick();
+        break;
+
+      case "resume operator":
+        this.handleResumeOperatorClick();
         break;
 
       default:
@@ -110,10 +128,55 @@ class Modal extends Component<IModalProps> {
     closeModal();
   };
 
+  createNewOrder(operators: [operatorsAttr, operatorsAttr, operatorsAttr]) {
+    if (this.props.menu) {
+      const orders = this.props.menu.menuContent;
+
+      const filteredOrders = orders.filter(
+          (order) => order.orderNumber === this.props.orderNumber
+      );
+
+      const details = filteredOrders[0];
+
+      const { orderNumber, quantity, partNumber, qrCode, customer, } = details;
+
+      const orderInfo = {
+        orderNumber,
+        quantity,
+        partNumber,
+        qrCode,
+        customer,
+        operators,
+      };
+
+      this.props.createOrder(orderInfo);
+    }
+  }
+
   handleAcceptOperatorClick = () => {
-    const { orderNumber, closeModal } = this.props;
-    console.log(orderNumber);
-    closeModal();
+    const { operators, closeModal } = this.props;
+    const hasAllOperators = operators.every((operator) => operator.operator);
+
+    if (hasAllOperators) {
+      this.createNewOrder(operators);
+      closeModal();
+    }
+  };
+
+  endCurrentBreak() {
+    const { orderNumber, _line, addBreakEnd, resumeOrder } = this.props;
+    addBreakEnd({ orderNumber, _line });
+    resumeOrder();
+  }
+  handleResumeOperatorClick = () => {
+    const { orderNumber, operators, closeModal, updateOrderOperators } = this.props;
+    const hasAllOperators = operators.every((operator) => operator.operator);
+
+    if (hasAllOperators && orderNumber) {
+      updateOrderOperators(orderNumber, operators);
+      this.endCurrentBreak();
+      closeModal();
+    }
   };
 
   handleCancelClick = () => {
@@ -129,9 +192,9 @@ class Modal extends Component<IModalProps> {
         onClick={this.handleCancelClick}
       >
         <div className="modal__card" onClick={(e) => e.stopPropagation()}
-             style={modalAction === 'accept operator' ? {height: 'fit-content'} : {}}>
+             style={modalAction === 'accept operator' || modalAction === 'resume operator' ? {height: 'fit-content'} : {}}>
           <div className="modal__card__header">{modalHeader}</div>
-          {modalAction === 'accept operator' ? (
+          {modalAction === 'accept operator' || modalAction === 'resume operator' ? (
               <OperatorPicker errorMessage={errorMessage} />
           ) : (
               <>
@@ -145,14 +208,15 @@ class Modal extends Component<IModalProps> {
                 modalAction === "finish" ? "btn--" + modalAction : "btn--delete"
               }`}
               onClick={this.handleActionClick}
+              disabled={modalAction === 'accept operator' || modalAction === 'resume operator' ? !this.props.operators.every((operator) => operator.operator) : false}
             >
-              YES, {modalAction}
+              {modalAction === 'accept operator' || modalAction === 'resume operator' ? `${modalAction}` : `YES, ${modalAction}`}
             </button>
             <button
               className={`btn btn--cancel`}
               onClick={this.handleCancelClick}
             >
-              NO, take me back
+              {modalAction === 'accept operator' || modalAction === 'resume operator' ? `take me back` : `NO, take me back`}
             </button>
           </div>
         </div>
@@ -175,6 +239,9 @@ function mapStateToProps(state: StoreState) {
     operatorId: state.modal.operatorId,
     callbackOnClose: state.modal.callbackOnClose,
     errorMessage: state.modal.errorMessage,
+    operators: state.scanner.existingOrder?.operators || state.scanner.pickedOperators,
+    menu: state.scanner.menu,
+    _line: state.scanner.pickedLine || localStorage.getItem("line"),
   };
 }
 export default connect(mapStateToProps, actions)(Modal);

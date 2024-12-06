@@ -13,6 +13,7 @@ export interface IModalState {
     | "delete partnumber"
     | "delete operator"
     | "accept operator"
+    | "resume operator"
     | "";
   redirectionId?: string;
   productId?: string;
@@ -133,9 +134,19 @@ export const modalReducer = (
       return {
         ...state,
         isModalOpened: true,
-        modalHeader: "Pick an operator for this order",
+        modalHeader: "Select a list of operators for this order",
         modalContent: ``,
         modalAction: "accept operator",
+        orderNumber: action.payload,
+      };
+
+    case ActionTypes.OPEN_RESUME_OPERATOR_MODAL:
+      return {
+        ...state,
+        isModalOpened: true,
+        modalHeader: "Resume or change a list of operators for this order",
+        modalContent: ``,
+        modalAction: "resume operator",
         orderNumber: action.payload,
       };
 
