@@ -1,15 +1,16 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import {ActionTypes, OrderType, HourlyRatesType, operatorsAttr} from "../../actions";
+import {ActionTypes, OrderType, HourlyRatesType} from "../../actions";
 import { ROOT_URL, headers } from "../../config";
 import { playProperSound } from "../../utils/audioPlayer";
+import {ValidOperators} from "../../utils/operators";
 
 export interface IInsertScan {
   scanContent: string;
   _line: string;
   _user: string;
   orderNumber: string;
-  operators?: [operatorsAttr, operatorsAttr, operatorsAttr];
+  operators?: ValidOperators;
 }
 
 export type OrderStatisticsType = {

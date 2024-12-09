@@ -1,11 +1,12 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import {ActionTypes, operatorsAttr} from "../../actions";
+import {ActionTypes} from "../../actions";
 import { ROOT_URL, headers } from "../../config";
+import {ValidOperators} from "../../utils/operators";
 
 export type UpdateOrderOperatorsAction = {
     type: ActionTypes.UPDATE_ORDER_OPERATORS;
-    payload: [operatorsAttr, operatorsAttr, operatorsAttr];
+    payload: ValidOperators;
 };
 
 export type UpdateOrderOperatorsActionError = {
@@ -14,7 +15,7 @@ export type UpdateOrderOperatorsActionError = {
 };
 
 export const updateOrderOperators =
-    (orderNumber: string, operators: [operatorsAttr, operatorsAttr, operatorsAttr], callback?: () => void) => {
+    (orderNumber: string, operators: ValidOperators, callback?: () => void) => {
     return async (dispatch: Dispatch) => {
         try {
             const dashedordernumber = orderNumber.replace(/\//g, "-");

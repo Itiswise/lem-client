@@ -3,17 +3,17 @@ import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import * as actions from "../../../actions";
-import {operatorsAttr, OperatorsListType} from "../../../actions";
+import {OperatorsListType} from "../../../actions";
 import { StoreState } from "../../../reducers";
 import UserIcon from "../../icons/UserIcon";
 import LineIcon from "../../icons/LineIcon";
-import {IPosition, positions as POSITIONS} from "../../../utils/positions";
+import {IPosition, operators as POSITIONS, ValidOperators} from "../../../utils/operators";
 
 interface IOperatorPickerProps {
     errorMessage: string;
-    initialValues: [operatorsAttr, operatorsAttr, operatorsAttr];
+    initialValues: ValidOperators;
     orderNumber?: string | null;
-    pickedOperators: [operatorsAttr, operatorsAttr, operatorsAttr];
+    pickedOperators: ValidOperators;
     isPaused: boolean;
     operators: OperatorsListType[];
     positions: IPosition[];
@@ -21,11 +21,11 @@ interface IOperatorPickerProps {
         isDisabled: boolean;
     };
     getScannerOperators: () => void;
-    pickOperators: (operators: [operatorsAttr, operatorsAttr, operatorsAttr]) => void;
+    pickOperators: (operators: ValidOperators) => void;
 }
 
 interface IFormProps extends React.ChangeEvent<HTMLInputElement> {
-    pickedOperators: [operatorsAttr, operatorsAttr, operatorsAttr];
+    pickedOperators: ValidOperators;
 }
 
 class OperatorPicker extends Component<
@@ -40,11 +40,11 @@ class OperatorPicker extends Component<
         const { value, name } = formProps.target;
 
         const updatedOperators = pickedOperators?.map((operator) => {
-            if (operator.position === name) {
+            if (operator.position === Number(name)) {
                 return { ...operator, operator: value };
             }
             return operator;
-        }) as [operatorsAttr, operatorsAttr, operatorsAttr];
+        }) as ValidOperators;
 
         this.props.pickOperators(updatedOperators);
     };
@@ -52,22 +52,6 @@ class OperatorPicker extends Component<
     renderAlert() {
         if (this.props.errorMessage) {
             return <div className="alert__message">{this.props.errorMessage}</div>;
-        }
-    }
-
-    renderPositionOptions() {
-        if (this.props.positions) {
-            return (
-                <>
-                    {this.props.positions.map((position) => (
-                        <option
-                            key={position.value}
-                            value={position.value}
-                            children={position.label}
-                        />
-                    ))}
-                </>
-            );
         }
     }
 
@@ -93,12 +77,12 @@ class OperatorPicker extends Component<
                 {this.props.pickedOperators && this.props.pickedOperators.map((item, index) => (
                     <fieldset key={index} className="form__group">
                         <label className="line-picker__label">
-                            <span><LineIcon /> {POSITIONS[index].value}</span>
+                            <span><LineIcon /> {POSITIONS[index].label}</span>
                         </label>
-                        <label className="line-picker__label" htmlFor={POSITIONS[index].value}>
+                        <label className="line-picker__label" htmlFor={`${POSITIONS[index].value}`}>
                             <span><UserIcon /> Operator</span>
                             <Field
-                                name={POSITIONS[index].value}
+                                name={`${POSITIONS[index].value}`}
                                 type="text"
                                 component="select"
                                 className="line-picker__select"
@@ -124,16 +108,20 @@ class OperatorPicker extends Component<
 }
 
 function mapStateToProps(state: StoreState) {
+    const initialValue = (index: number) => ({
+        [POSITIONS[index].value]: (state.scanner.existingOrder?.operators &&
+            state.scanner.existingOrder?.operators[index].operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[index].operator) || '',
+    });
+
+    const initialValues = {};
+
+    for (let i = 0; i < POSITIONS.length; i++) {
+        Object.assign(initialValues, initialValue(i));
+    }
+
     return {
         errorMessage: state.scanner.errorMessage,
-        initialValues: {
-            [POSITIONS[0].value]: (state.scanner.existingOrder?.operators &&
-                state.scanner.existingOrder?.operators[0].operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[0].operator) || '',
-            [POSITIONS[1].value]: (state.scanner.existingOrder?.operators &&
-                state.scanner.existingOrder?.operators[1].operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[1].operator) || '',
-            [POSITIONS[2].value]: (state.scanner.existingOrder?.operators &&
-                state.scanner.existingOrder?.operators[2].operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[2].operator) || '',
-        },
+        initialValues,
         orderNumber: state.scanner.pickedOrder || localStorage.getItem("order"),
         pickedOperators: state.scanner.pickedOperators,
         enableReinitialize: true,

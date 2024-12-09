@@ -12,11 +12,12 @@ import {
   IAddBreakStart,
   ICloseOrder,
   PauseOrderAction,
-  PartnumberConfigType, operatorsAttr,
+  PartnumberConfigType,
 } from "../../../actions";
 import { StoreState } from "../../../reducers";
 import ScannerIcon from "../../icons/ScannerIcon";
 import "./ReaderInputStyle.scss";
+import {ValidOperators} from "../../../utils/operators";
 
 interface IReaderInputProps {
   errorMessage: string;
@@ -84,7 +85,7 @@ class ReaderInput extends Component<
     const operators = existingOrder?.operators?.map((operator) => ({
       position: operator.position,
       operator: operator.operator,
-    })) as [operatorsAttr, operatorsAttr, operatorsAttr];
+    })) as ValidOperators;
 
     insertScan({
       scanContent,

@@ -5,7 +5,8 @@ import {StoreState} from "../reducers";
 import {IModalState} from "../reducers/modalReducer";
 import "./ModalStyle.scss";
 import OperatorPicker from "./Scanner/modal/OperatorPicker";
-import {IAddBreakEnd, ICreateOrder, MenuDataType, operatorsAttr, ResumeOrderAction} from "../actions";
+import {IAddBreakEnd, ICreateOrder, MenuDataType, ResumeOrderAction} from "../actions";
+import {ValidOperators} from "../utils/operators";
 
 interface IModalProps extends IModalState {
   orderNumber?: string | null;
@@ -21,7 +22,7 @@ interface IModalProps extends IModalState {
   callbackOnClose?: () => void;
   errorMessage: string | undefined;
   errorScannerMessage: string | undefined;
-  operators: [operatorsAttr, operatorsAttr, operatorsAttr];
+  operators: ValidOperators;
   menu: MenuDataType;
   createOrder: ({
     orderNumber,
@@ -33,7 +34,7 @@ interface IModalProps extends IModalState {
   }: ICreateOrder, callback?: () => void) => void;
   addBreakEnd: ({ orderNumber, _line }: IAddBreakEnd) => void;
   resumeOrder: () => ResumeOrderAction
-  updateOrderOperators: (orderNumber: string, operators: [operatorsAttr, operatorsAttr, operatorsAttr], callback?: () => void) => void;
+  updateOrderOperators: (orderNumber: string, operators: ValidOperators, callback?: () => void) => void;
 }
 
 class Modal extends Component<IModalProps> {
@@ -129,7 +130,7 @@ class Modal extends Component<IModalProps> {
     closeModal();
   };
 
-  createNewOrder(operators: [operatorsAttr, operatorsAttr, operatorsAttr], callback?: () => void) {
+  createNewOrder(operators: ValidOperators, callback?: () => void) {
     if (this.props.menu) {
       const orders = this.props.menu.menuContent;
 
