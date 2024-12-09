@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import { ActionTypes, operatorsAttr } from "../../actions";
+import { ActionTypes } from "../../actions";
 import { ROOT_URL, headers } from "../../config";
 import {ValidOperators} from "../../utils/operators";
 

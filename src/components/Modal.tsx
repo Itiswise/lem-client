@@ -21,7 +21,6 @@ interface IModalProps extends IModalState {
   deletePartnumber: (partnumberId?: string) => void;
   callbackOnClose?: () => void;
   errorMessage: string | undefined;
-  errorScannerMessage: string | undefined;
   operators: ValidOperators;
   menu: MenuDataType;
   createOrder: ({
@@ -156,7 +155,7 @@ class Modal extends Component<IModalProps> {
   }
 
   handleAcceptOperatorClick = () => {
-    const { operators, closeModal, errorScannerMessage } = this.props;
+    const { operators, closeModal } = this.props;
     const hasAllOperators = operators?.every((operator) => operator.operator);
 
     if (hasAllOperators) {
@@ -172,7 +171,7 @@ class Modal extends Component<IModalProps> {
     resumeOrder();
   }
   handleResumeOperatorClick = () => {
-    const { orderNumber, operators, closeModal, updateOrderOperators, errorScannerMessage } = this.props;
+    const { orderNumber, operators, closeModal, updateOrderOperators } = this.props;
     const hasAllOperators = operators?.every((operator) => operator.operator);
 
     if (hasAllOperators && orderNumber) {
@@ -188,7 +187,7 @@ class Modal extends Component<IModalProps> {
   };
 
   render() {
-    const { isModalOpened, modalHeader, modalContent, modalAction, errorMessage, errorScannerMessage } =
+    const { isModalOpened, modalHeader, modalContent, modalAction, errorMessage } =
       this.props;
     return (
       <div
@@ -243,7 +242,6 @@ function mapStateToProps(state: StoreState) {
     operatorId: state.modal.operatorId,
     callbackOnClose: state.modal.callbackOnClose,
     errorMessage: state.modal.errorMessage,
-    errorScannerMessage: state.scanner.errorMessage,
     operators: state.scanner.existingOrder?.operators || state.scanner.pickedOperators,
     menu: state.scanner.menu,
     _line: state.scanner.pickedLine || localStorage.getItem("line"),
