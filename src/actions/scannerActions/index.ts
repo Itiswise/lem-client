@@ -17,3 +17,6 @@ export * from "./addBreakEnd";
 export * from "./setOrderPauseStatus";
 export * from "./pauseOrder";
 export * from "./resumeOrder";
+export * from "./getOperators";
+export * from "./pickOperators";
+export * from "./updateOrderOperators";

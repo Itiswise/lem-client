@@ -1,21 +1,27 @@
 import {
-  ScannerAction,
   ActionTypes,
-  OrderType,
-  LineType,
-  OrderStatisticsType,
-  MenuDataType,
   HourlyRatesType,
+  LineType,
+  MenuDataType,
+  operatorsAttr,
+  OperatorsListType,
+  OrderStatisticsType,
+  OrderType,
+  ScannerAction,
 } from "../actions";
+import {IPosition, positions} from "../utils/positions";
 
 export interface IScannerState {
   message: string;
   lines: LineType[];
+  operators: OperatorsListType[];
+  positions: IPosition[];
   userType: string;
   userName: string;
   userId: string;
   userEmail: string;
   pickedOrder: string;
+  pickedOperators: [operatorsAttr, operatorsAttr, operatorsAttr];
   menu: MenuDataType;
   pickedLine: string;
   deleteMessage: string;
@@ -33,11 +39,17 @@ export interface IScannerState {
 const SCANNER_INITIAL_STATE: IScannerState = {
   message: "",
   lines: [],
+  operators: [],
+  positions,
   userType: "",
   userName: "",
   userId: "",
   userEmail: "",
   pickedOrder: "",
+  pickedOperators: positions.map((pos) => ({
+    position: pos.value,
+    operator: null,
+  })) as [operatorsAttr, operatorsAttr, operatorsAttr],
   menu: {
     menuContent: [
       {
@@ -170,15 +182,49 @@ export const scannerReducer = (
         ...state,
         lines: action.payload,
       };
+
     case ActionTypes.GET_LINES_ERROR:
       return { ...state, errorMessage: action.payload };
+
+    case ActionTypes.GET_SCANNER_OPERATORS_LIST:
+      return {
+        ...state,
+        operators: action.payload,
+      };
+
+    case ActionTypes.GET_SCANNER_OPERATORS_LIST_ERROR:
+      return {...state, errorMessage: action.payload};
 
     case ActionTypes.PICK_LINE:
       return {
         ...state,
         pickedLine: action.payload,
         errorMessage: "",
+      }
+
+    case ActionTypes.PICK_OPERATORS:
+      return {
+        ...state,
+        pickedOperators: action.payload,
+        existingOrder: {
+          ...state.existingOrder,
+          operators: action.payload,
+        }
       };
+
+    case ActionTypes.UPDATE_ORDER_OPERATORS:
+      return {
+        ...state,
+        existingOrder: {
+          ...state.existingOrder,
+          operators: action.payload,
+        },
+        pickedOperators: action.payload,
+        errorMessage: "",
+      };
+
+    case ActionTypes.UPDATE_ORDER_OPERATORS_ERROR:
+      return {...state, errorMessage: action.payload};
 
     case ActionTypes.PICK_LINE_ERROR:
       return { ...state, errorMessage: "" };
@@ -207,6 +253,7 @@ export const scannerReducer = (
       return {
         ...state,
         existingOrder: action.payload.order,
+        errorMessage: "",
       };
 
     case ActionTypes.CREATE_ORDER_ERROR:

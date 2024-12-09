@@ -39,6 +39,11 @@ import {
   PauseOrderAction,
   ResumeOrderAction,
   SetOrderPauseStatusAction,
+  GetScannerOperatorsAction,
+  GetScannerOperatorsActionError,
+  PickOperatorsAction,
+  UpdateOrderOperatorsAction,
+  UpdateOrderOperatorsActionError,
 } from "./scannerActions";
 
 import {
@@ -50,6 +55,8 @@ import {
   OpenDeleteOrderFromStatsModalAction,
   OpenDeletePartnumberModalAction,
   OpenDeleteOperatorModalAction,
+  OpenOperatorModalAction,
+  OpenResumeOperatorModalAction,
   SetModalErrorMessageAction,
 } from "./modalActions";
 
@@ -315,6 +322,15 @@ export enum ActionTypes {
   EDIT_OPERATOR_BEGIN,
   EDIT_OPERATOR,
   EDIT_OPERATOR_ERROR,
+
+  OPEN_OPERATOR_MODAL,
+  OPEN_RESUME_OPERATOR_MODAL,
+  GET_SCANNER_OPERATORS_LIST,
+  GET_SCANNER_OPERATORS_LIST_ERROR,
+  PICK_OPERATORS,
+
+  UPDATE_ORDER_OPERATORS,
+  UPDATE_ORDER_OPERATORS_ERROR,
 }
 
 export enum Tab {
@@ -371,7 +387,12 @@ export type ScannerAction =
   | AddBreakEndActionError
   | PauseOrderAction
   | ResumeOrderAction
-  | SetOrderPauseStatusAction;
+  | SetOrderPauseStatusAction
+  | GetScannerOperatorsAction
+  | GetScannerOperatorsActionError
+  | PickOperatorsAction
+  | UpdateOrderOperatorsAction
+  | UpdateOrderOperatorsActionError;
 
 export type ModalAction =
   | OpenFinishModalAction
@@ -382,6 +403,8 @@ export type ModalAction =
   | OpenDeleteOrderFromStatsModalAction
   | OpenDeletePartnumberModalAction
   | OpenDeleteOperatorModalAction
+  | OpenOperatorModalAction
+  | OpenResumeOperatorModalAction
   | SetModalErrorMessageAction;
 
 export type DashboardAction =

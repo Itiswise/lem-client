@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import { ActionTypes } from "../../actions";
+import { ActionTypes, operatorsAttr } from "../../actions";
 import { ROOT_URL, headers } from "../../config";
 
 export type MenuDataType = {
@@ -12,6 +12,7 @@ export type MenuDataType = {
     qrCode: string;
     partNumber: string;
     tactTime: number;
+    operators?: [operatorsAttr, operatorsAttr, operatorsAttr];
   }[];
   timestamp: string;
   idCode: string;
