@@ -3,13 +3,12 @@ import {
   HourlyRatesType,
   LineType,
   MenuDataType,
-  operatorsAttr,
   OperatorsListType,
   OrderStatisticsType,
   OrderType,
   ScannerAction,
 } from "../actions";
-import {IPosition, positions} from "../utils/positions";
+import {IPosition, operators, ValidOperators} from "../utils/operators";
 
 export interface IScannerState {
   message: string;
@@ -21,7 +20,7 @@ export interface IScannerState {
   userId: string;
   userEmail: string;
   pickedOrder: string;
-  pickedOperators: [operatorsAttr, operatorsAttr, operatorsAttr];
+  pickedOperators: ValidOperators;
   menu: MenuDataType;
   pickedLine: string;
   deleteMessage: string;
@@ -40,16 +39,16 @@ const SCANNER_INITIAL_STATE: IScannerState = {
   message: "",
   lines: [],
   operators: [],
-  positions,
+  positions: operators,
   userType: "",
   userName: "",
   userId: "",
   userEmail: "",
   pickedOrder: "",
-  pickedOperators: positions.map((pos) => ({
+  pickedOperators: operators.map((pos) => ({
     position: pos.value,
     operator: null,
-  })) as [operatorsAttr, operatorsAttr, operatorsAttr],
+  })) as ValidOperators,
   menu: {
     menuContent: [
       {
@@ -104,6 +103,10 @@ const SCANNER_INITIAL_STATE: IScannerState = {
         timeStamp: "",
         errorCode: "",
         scanContent: "",
+        operators: operators.map((pos) => ({
+          position: pos.value,
+          operator: null,
+        })) as ValidOperators,
       },
     ],
   },

@@ -45,7 +45,8 @@ class Game extends Component<IGameProps> {
 
   getStatsFromLastThreeHours() {
     const { hourlyRates } = this.props;
-    const lastThree = hourlyRates?.slice(-3);
+    const safeHourlyRates = Array.isArray(hourlyRates) ? hourlyRates : [];
+    const lastThree = safeHourlyRates?.slice(-3);
     return lastThree?.map((x) => {
       return {
         hour: this.getHour(x.dateHour),

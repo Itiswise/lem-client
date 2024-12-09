@@ -1,11 +1,12 @@
-import {ActionTypes, operatorsAttr} from "../../actions";
+import {ActionTypes} from "../../actions";
+import {ValidOperators} from "../../utils/operators";
 
 export type PickOperatorsAction = {
     type: ActionTypes.PICK_OPERATORS;
-    payload: [operatorsAttr, operatorsAttr, operatorsAttr];
+    payload: ValidOperators;
 };
 
 export const pickOperators =
-    (operators: [operatorsAttr, operatorsAttr, operatorsAttr]): PickOperatorsAction => {
+    (operators: ValidOperators): PickOperatorsAction => {
     return { type: ActionTypes.PICK_OPERATORS, payload: operators };
 };

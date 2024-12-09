@@ -2,9 +2,10 @@ import axios from "axios";
 import {Dispatch} from "redux";
 import {ActionTypes} from "../../actions";
 import {headers, ROOT_URL} from "../../config";
+import {ValidOperators, ValidPosition} from "../../utils/operators";
 
 export interface operatorsAttr {
-  position: 'Position 1' | 'Position 2' | 'Position 3';
+  position: ValidPosition;
   operator: string | null;
 }
 
@@ -16,7 +17,7 @@ export interface ICreateOrder {
   customer: string;
   orderStatus?: string;
   orderAddedAt?: string;
-  operators?: [operatorsAttr, operatorsAttr, operatorsAttr];
+  operators?: ValidOperators;
 }
 
 export type OrderType = {
@@ -40,10 +41,11 @@ export type OrderType = {
     timeStamp?: string;
     errorCode?: string;
     scanContent?: string;
+    operators?: ValidOperators;
     _line?: string;
     _user?: string;
   }[];
-  operators?: [operatorsAttr, operatorsAttr, operatorsAttr];
+  operators?: ValidOperators;
 };
 
 export type CreateOrderAction = {
