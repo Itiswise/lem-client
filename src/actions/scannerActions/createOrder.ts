@@ -1,7 +1,7 @@
 import axios from "axios";
-import { Dispatch } from "redux";
-import { ActionTypes } from "../../actions";
-import { ROOT_URL, headers } from "../../config";
+import {Dispatch} from "redux";
+import {ActionTypes} from "../../actions";
+import {headers, ROOT_URL} from "../../config";
 
 export interface operatorsAttr {
   position: 'Position 1' | 'Position 2' | 'Position 3';
@@ -57,7 +57,7 @@ export type CreateOrderActionError = {
 };
 
 export const createOrder =
-  ({ orderNumber, quantity, partNumber, qrCode, customer, operators }: ICreateOrder) =>
+    ({orderNumber, quantity, partNumber, qrCode, customer, operators}: ICreateOrder, callback?: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       const resp = await axios.post(
@@ -91,10 +91,14 @@ export const createOrder =
         type: ActionTypes.CREATE_ORDER,
         payload: response.data,
       });
+
+      if (callback) {
+        callback();
+      }
     } catch (e: any) {
       dispatch<CreateOrderActionError>({
         type: ActionTypes.CREATE_ORDER_ERROR,
-        payload: "Can not create this order - incomplete information",
+        payload: "Can not create this order - incomplete or wrong information",
       });
     }
   };

@@ -220,6 +220,7 @@ export const scannerReducer = (
           operators: action.payload,
         },
         pickedOperators: action.payload,
+        errorMessage: "",
       };
 
     case ActionTypes.UPDATE_ORDER_OPERATORS_ERROR:
@@ -252,6 +253,7 @@ export const scannerReducer = (
       return {
         ...state,
         existingOrder: action.payload.order,
+        errorMessage: "",
       };
 
     case ActionTypes.CREATE_ORDER_ERROR:

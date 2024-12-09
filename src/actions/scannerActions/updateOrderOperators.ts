@@ -14,7 +14,7 @@ export type UpdateOrderOperatorsActionError = {
 };
 
 export const updateOrderOperators =
-    (orderNumber: string, operators: [operatorsAttr, operatorsAttr, operatorsAttr]) => {
+    (orderNumber: string, operators: [operatorsAttr, operatorsAttr, operatorsAttr], callback?: () => void) => {
     return async (dispatch: Dispatch) => {
         try {
             const dashedordernumber = orderNumber.replace(/\//g, "-");
@@ -24,10 +24,14 @@ export const updateOrderOperators =
                 type: ActionTypes.UPDATE_ORDER_OPERATORS,
                 payload: response.data.existingOrder.operators
             });
+
+            if (callback) {
+                callback();
+            }
         } catch (e: any) {
             dispatch<UpdateOrderOperatorsActionError>({
                 type: ActionTypes.UPDATE_ORDER_OPERATORS_ERROR,
-                payload: e.message
+                payload: "Error updating operators - please check if there's no duplicates!"
             });
         }
     };

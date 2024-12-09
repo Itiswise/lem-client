@@ -20,6 +20,7 @@ interface IModalProps extends IModalState {
   deletePartnumber: (partnumberId?: string) => void;
   callbackOnClose?: () => void;
   errorMessage: string | undefined;
+  errorScannerMessage: string | undefined;
   operators: [operatorsAttr, operatorsAttr, operatorsAttr];
   menu: MenuDataType;
   createOrder: ({
@@ -29,10 +30,10 @@ interface IModalProps extends IModalState {
     qrCode,
     customer,
     operators,
-  }: ICreateOrder) => void;
+  }: ICreateOrder, callback?: () => void) => void;
   addBreakEnd: ({ orderNumber, _line }: IAddBreakEnd) => void;
   resumeOrder: () => ResumeOrderAction
-  updateOrderOperators: (orderNumber: string, operators: [operatorsAttr, operatorsAttr, operatorsAttr]) => void;
+  updateOrderOperators: (orderNumber: string, operators: [operatorsAttr, operatorsAttr, operatorsAttr], callback?: () => void) => void;
 }
 
 class Modal extends Component<IModalProps> {
@@ -128,7 +129,7 @@ class Modal extends Component<IModalProps> {
     closeModal();
   };
 
-  createNewOrder(operators: [operatorsAttr, operatorsAttr, operatorsAttr]) {
+  createNewOrder(operators: [operatorsAttr, operatorsAttr, operatorsAttr], callback?: () => void) {
     if (this.props.menu) {
       const orders = this.props.menu.menuContent;
 
@@ -149,17 +150,18 @@ class Modal extends Component<IModalProps> {
         operators,
       };
 
-      this.props.createOrder(orderInfo);
+      this.props.createOrder(orderInfo, callback);
     }
   }
 
   handleAcceptOperatorClick = () => {
-    const { operators, closeModal } = this.props;
-    const hasAllOperators = operators.every((operator) => operator.operator);
+    const { operators, closeModal, errorScannerMessage } = this.props;
+    const hasAllOperators = operators?.every((operator) => operator.operator);
 
     if (hasAllOperators) {
-      this.createNewOrder(operators);
-      closeModal();
+      this.createNewOrder(operators, () => {
+        closeModal();
+      });
     }
   };
 
@@ -169,13 +171,14 @@ class Modal extends Component<IModalProps> {
     resumeOrder();
   }
   handleResumeOperatorClick = () => {
-    const { orderNumber, operators, closeModal, updateOrderOperators } = this.props;
-    const hasAllOperators = operators.every((operator) => operator.operator);
+    const { orderNumber, operators, closeModal, updateOrderOperators, errorScannerMessage } = this.props;
+    const hasAllOperators = operators?.every((operator) => operator.operator);
 
     if (hasAllOperators && orderNumber) {
-      updateOrderOperators(orderNumber, operators);
-      this.endCurrentBreak();
-      closeModal();
+      updateOrderOperators(orderNumber, operators, () => {
+          this.endCurrentBreak();
+          closeModal();
+      });
     }
   };
 
@@ -184,7 +187,7 @@ class Modal extends Component<IModalProps> {
   };
 
   render() {
-    const { isModalOpened, modalHeader, modalContent, modalAction, errorMessage } =
+    const { isModalOpened, modalHeader, modalContent, modalAction, errorMessage, errorScannerMessage } =
       this.props;
     return (
       <div
@@ -195,7 +198,7 @@ class Modal extends Component<IModalProps> {
              style={modalAction === 'accept operator' || modalAction === 'resume operator' ? {height: 'fit-content'} : {}}>
           <div className="modal__card__header">{modalHeader}</div>
           {modalAction === 'accept operator' || modalAction === 'resume operator' ? (
-              <OperatorPicker errorMessage={errorMessage} />
+              <OperatorPicker />
           ) : (
               <>
               <div className="modal__card__content">{modalContent}</div>
@@ -208,7 +211,7 @@ class Modal extends Component<IModalProps> {
                 modalAction === "finish" ? "btn--" + modalAction : "btn--delete"
               }`}
               onClick={this.handleActionClick}
-              disabled={modalAction === 'accept operator' || modalAction === 'resume operator' ? !this.props.operators.every((operator) => operator.operator) : false}
+              disabled={modalAction === 'accept operator' || modalAction === 'resume operator' ? !this.props.operators?.every((operator) => operator.operator) : false}
             >
               {modalAction === 'accept operator' || modalAction === 'resume operator' ? `${modalAction}` : `YES, ${modalAction}`}
             </button>
@@ -239,6 +242,7 @@ function mapStateToProps(state: StoreState) {
     operatorId: state.modal.operatorId,
     callbackOnClose: state.modal.callbackOnClose,
     errorMessage: state.modal.errorMessage,
+    errorScannerMessage: state.scanner.errorMessage,
     operators: state.scanner.existingOrder?.operators || state.scanner.pickedOperators,
     menu: state.scanner.menu,
     _line: state.scanner.pickedLine || localStorage.getItem("line"),

@@ -39,14 +39,12 @@ class OperatorPicker extends Component<
         const { pickedOperators } = this.props;
         const { value, name } = formProps.target;
 
-        const updatedOperators = pickedOperators.map((operator) => {
+        const updatedOperators = pickedOperators?.map((operator) => {
             if (operator.position === name) {
                 return { ...operator, operator: value };
             }
             return operator;
         }) as [operatorsAttr, operatorsAttr, operatorsAttr];
-
-        console.log(updatedOperators);
 
         this.props.pickOperators(updatedOperators);
     };
@@ -90,24 +88,6 @@ class OperatorPicker extends Component<
     }
 
     renderOperatorComponent() {
-        const isReaderInputEnabled = !this.props.readerInputState.isDisabled;
-        // if (isReaderInputEnabled) {
-        //     const filteredPosition = this.props.positions.filter(
-        //         (position) => position.value === this.props.position.value
-        //     );
-        //
-        //     const filteredOperator = this.props.operators.filter(
-        //         (operator) => operator._id === this.props.operator
-        //     );
-        //
-        //     return (
-        //         <div className="chosen-line">
-        //             {filteredPosition[0] && `Stanowisko - ${filteredPosition[0].label}`}
-        //             {filteredOperator[0] && `Operator - ${filteredOperator[0].firstname} ${filteredOperator[0].lastname} (${filteredOperator[0].email})`}
-        //         </div>
-        //     );
-        // }
-
         return (
             <form className="form">
                 {this.props.pickedOperators && this.props.pickedOperators.map((item, index) => (
@@ -124,7 +104,6 @@ class OperatorPicker extends Component<
                                 className="line-picker__select"
                                 onChange={this.handleOperatorChange}
                                 required
-                                disabled={isReaderInputEnabled}
                             >
                                 <option value="" children="Choose an operator" />
                                 {this.renderOperatorOptions()}
@@ -137,23 +116,26 @@ class OperatorPicker extends Component<
     }
 
     render() {
-        return <div>{this.renderOperatorComponent()}</div>;
+        return <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            {this.renderOperatorComponent()}
+            {this.renderAlert()}
+        </div>;
     }
 }
 
 function mapStateToProps(state: StoreState) {
     return {
-        errorMessage: state.auth.errorMessage,
+        errorMessage: state.scanner.errorMessage,
         initialValues: {
             [POSITIONS[0].value]: (state.scanner.existingOrder?.operators &&
-                state.scanner.existingOrder?.operators[0].operator) || state.scanner.pickedOperators[0].operator || '',
+                state.scanner.existingOrder?.operators[0].operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[0].operator) || '',
             [POSITIONS[1].value]: (state.scanner.existingOrder?.operators &&
-                state.scanner.existingOrder?.operators[1].operator) || state.scanner.pickedOperators[1].operator || '',
+                state.scanner.existingOrder?.operators[1].operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[1].operator) || '',
             [POSITIONS[2].value]: (state.scanner.existingOrder?.operators &&
-                state.scanner.existingOrder?.operators[2].operator) || state.scanner.pickedOperators[2].operator || '',
+                state.scanner.existingOrder?.operators[2].operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[2].operator) || '',
         },
         orderNumber: state.scanner.pickedOrder || localStorage.getItem("order"),
-        pickedOperators: state.scanner.existingOrder?.operators || state.scanner.pickedOperators,
+        pickedOperators: state.scanner.pickedOperators,
         enableReinitialize: true,
         isPaused: state.scanner.isPaused,
         operators: state.scanner.operators,
