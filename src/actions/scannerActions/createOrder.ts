@@ -40,6 +40,7 @@ export type OrderType = {
     timeStamp?: string;
     errorCode?: string;
     scanContent?: string;
+    operators?: [operatorsAttr, operatorsAttr, operatorsAttr];
     _line?: string;
     _user?: string;
   }[];

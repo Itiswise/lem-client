@@ -104,6 +104,10 @@ const SCANNER_INITIAL_STATE: IScannerState = {
         timeStamp: "",
         errorCode: "",
         scanContent: "",
+        operators: positions.map((pos) => ({
+          position: pos.value,
+          operator: null,
+        })) as [operatorsAttr, operatorsAttr, operatorsAttr],
       },
     ],
   },

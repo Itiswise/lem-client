@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import { ActionTypes, OrderType, HourlyRatesType } from "../../actions";
+import {ActionTypes, OrderType, HourlyRatesType, operatorsAttr} from "../../actions";
 import { ROOT_URL, headers } from "../../config";
 import { playProperSound } from "../../utils/audioPlayer";
 
@@ -9,6 +9,7 @@ export interface IInsertScan {
   _line: string;
   _user: string;
   orderNumber: string;
+  operators?: [operatorsAttr, operatorsAttr, operatorsAttr];
 }
 
 export type OrderStatisticsType = {
@@ -49,7 +50,7 @@ export type InsertScanActionError = {
 };
 
 export const insertScan =
-  ({ scanContent, _line, _user, orderNumber }: IInsertScan) =>
+  ({ scanContent, _line, _user, orderNumber, operators }: IInsertScan) =>
   async (dispatch: Dispatch) => {
     try {
       const response = await axios.post(
@@ -59,6 +60,7 @@ export const insertScan =
           _line,
           _user,
           orderNumber,
+          operators
         },
         {
           headers,
@@ -72,7 +74,7 @@ export const insertScan =
     } catch (e: any) {
       dispatch<InsertScanActionError>({
         type: ActionTypes.INSERT_SCAN_ERROR,
-        payload: "e.response.data.error",
+        payload: "Scan insert error",
       });
     }
   };

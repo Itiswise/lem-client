@@ -12,7 +12,7 @@ import {
   IAddBreakStart,
   ICloseOrder,
   PauseOrderAction,
-  PartnumberConfigType,
+  PartnumberConfigType, operatorsAttr,
 } from "../../../actions";
 import { StoreState } from "../../../reducers";
 import ScannerIcon from "../../icons/ScannerIcon";
@@ -35,7 +35,7 @@ interface IReaderInputProps {
   enableReaderInput: () => EnableReaderInputAction;
   getPartnumberConfig: () => void;
   partnumberConfig: PartnumberConfigType;
-  insertScan: ({ scanContent, _line, _user, orderNumber }: IInsertScan) => void;
+  insertScan: ({ scanContent, _line, _user, orderNumber, operators }: IInsertScan) => void;
   addBreakStart: ({ orderNumber, _line }: IAddBreakStart) => void;
   closeOrder: ({ orderNumber }: ICloseOrder) => void;
   pauseOrder: () => PauseOrderAction;
@@ -78,13 +78,20 @@ class ReaderInput extends Component<
       insertScan,
       reset,
       getPartnumberConfig,
+      existingOrder,
     } = this.props;
+
+    const operators = existingOrder?.operators?.map((operator) => ({
+      position: operator.position,
+      operator: operator.operator,
+    })) as [operatorsAttr, operatorsAttr, operatorsAttr];
 
     insertScan({
       scanContent,
       _line,
       _user: userId,
       orderNumber,
+      operators,
     });
     reset();
     getPartnumberConfig();

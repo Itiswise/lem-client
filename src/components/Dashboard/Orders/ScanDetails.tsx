@@ -9,8 +9,8 @@ interface IScanDetailsProps {
 
 class ScanDetails extends Component<IScanDetailsProps> {
   renderTimestamps(scansTimestamps: string[]) {
-    return scansTimestamps.map((timestamp) => (
-      <div key={timestamp}>{timestamp}</div>
+    return scansTimestamps.map((timestamp, i) => (
+      <div key={timestamp} style={{ whiteSpace: 'pre-wrap' }}>{timestamp}</div>
     ));
   }
 
