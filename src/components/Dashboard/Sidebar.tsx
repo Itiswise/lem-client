@@ -16,6 +16,7 @@ import AnalyticsIcon from "../icons/AnalyticsIcon";
 import LiveViewIcon from "../icons/LiveViewIcon";
 import ProductIcon from "../icons/ProductIcon";
 import RedirectionIcon from "../icons/RedirectionIcon";
+import OperatorIcon from "../icons/OperatorIcon";
 
 interface ISidebarProps {
   authenticated: string | null;
@@ -49,7 +50,7 @@ class Sidebar extends Component<ISidebarProps> {
               <UserIcon />
             </SidebarTab>
             <SidebarTab tab={Tab.ManagementOperators} text="operators">
-              <UserIcon />
+              <OperatorIcon />
             </SidebarTab>
             <SidebarTab tab={Tab.ManagementCustomers} text="customers">
               <CustomerIcon />
