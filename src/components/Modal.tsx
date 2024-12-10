@@ -17,10 +17,11 @@ interface IModalProps extends IModalState {
   deleteOrder: ({ orderNumber }: actions.IDeleteOrder) => void;
   deleteRedirection: (redirectionId?: string) => void;
   deleteProduct: (productId?: string) => void;
-  deleteOperator: (operatorId?: string) => void;
+  deleteOperator: (operatorId?: string, callback?: () => void) => void;
   deletePartnumber: (partnumberId?: string) => void;
   callbackOnClose?: () => void;
   errorMessage: string | undefined;
+  errorDashboardMessage: string | undefined;
   operators: ValidOperators;
   menu: MenuDataType;
   createOrder: ({
@@ -125,8 +126,9 @@ class Modal extends Component<IModalProps> {
 
   handleDeleteOperatorClick = () => {
     const { operatorId, deleteOperator, closeModal } = this.props;
-    deleteOperator(operatorId);
-    closeModal();
+    deleteOperator(operatorId, function() {
+      closeModal();
+    });
   };
 
   createNewOrder(operators: ValidOperators, callback?: () => void) {
@@ -187,7 +189,7 @@ class Modal extends Component<IModalProps> {
   };
 
   render() {
-    const { isModalOpened, modalHeader, modalContent, modalAction, errorMessage } =
+    const { isModalOpened, modalHeader, modalContent, modalAction, errorMessage, errorDashboardMessage } =
       this.props;
     return (
       <div
@@ -202,7 +204,7 @@ class Modal extends Component<IModalProps> {
           ) : (
               <>
               <div className="modal__card__content">{modalContent}</div>
-              <div className="modal__card__error">{errorMessage}</div>
+              <div className="modal__card__error">{errorMessage || errorDashboardMessage}</div>
               </>
           )}
           <div className="modal__card__buttons">
@@ -242,6 +244,7 @@ function mapStateToProps(state: StoreState) {
     operatorId: state.modal.operatorId,
     callbackOnClose: state.modal.callbackOnClose,
     errorMessage: state.modal.errorMessage,
+    errorDashboardMessage: state.dashboard.errorMessage,
     operators: state.scanner.existingOrder?.operators || state.scanner.pickedOperators,
     menu: state.scanner.menu,
     _line: state.scanner.pickedLine || localStorage.getItem("line"),
