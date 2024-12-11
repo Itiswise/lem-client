@@ -7,6 +7,7 @@ import MissingScansIcon from "../../icons/MissingScansIcon";
 import "./MissingScansStyle.scss";
 
 interface IMissingScansProps {
+  orderNumber?: string | null;
   existingOrder?: OrderType;
 }
 
@@ -61,7 +62,7 @@ class MissingScans extends Component<IMissingScansProps> {
   }
 
   renderMissingScans() {
-    if (this.props?.existingOrder?._id) {
+    if (this.props?.existingOrder?._id && this.props.orderNumber) {
       const { scans } = this.props.existingOrder;
       const scansWithoutErrors = scans
         ? scans
@@ -101,6 +102,7 @@ class MissingScans extends Component<IMissingScansProps> {
 function mapStateToProps(state: StoreState) {
   return {
     existingOrder: state.scanner.existingOrder,
+    orderNumber: state.scanner.pickedOrder || localStorage.getItem("order"),
   };
 }
 

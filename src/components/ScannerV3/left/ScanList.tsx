@@ -38,7 +38,7 @@ class ScanList extends Component<IScanListProps> {
   }
 
   renderScanList() {
-    if (this.props.existingOrder) {
+    if (this.props.existingOrder && this.props.orderNumber) {
       const { scans } = this.props.existingOrder;
       const { _line, ScanContent } = this.props;
       //getOrderDetails(this.props.existingOrder._id);

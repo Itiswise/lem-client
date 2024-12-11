@@ -41,6 +41,8 @@ class LinePicker extends Component<
     const newLineId = formProps.target.value;
     const userName = this.props.userName;
 
+    localStorage.setItem("order", "");
+
     this.props.pickLine({ currentLineId, newLineId, userName });
   };
 

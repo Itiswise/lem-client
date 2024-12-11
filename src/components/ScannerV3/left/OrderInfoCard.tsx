@@ -6,6 +6,7 @@ import { StoreState } from "../../../reducers";
 import "./OrderInfoCardStyle.scss";
 
 interface IOrderInfoCardProps {
+  orderNumber?: string | null;
   existingOrder?: OrderType;
   readerInputState: {
     isDisabled: boolean;
@@ -14,38 +15,38 @@ interface IOrderInfoCardProps {
 
 class OrderInfoCard extends Component<IOrderInfoCardProps> {
   renderOrderNumber() {
-    if (this.props.existingOrder) {
+    if (this.props.existingOrder && this.props.orderNumber) {
       const { orderNumber } = this.props.existingOrder;
       return orderNumber;
     } else {
-      return "--";
+      return "";
     }
   }
 
   renderCustomer() {
-    if (this.props.existingOrder) {
+    if (this.props.existingOrder && this.props.orderNumber) {
       const { customer } = this.props.existingOrder;
       return customer;
     } else {
-      return "--";
+      return "";
     }
   }
 
   renderPartNumber() {
-    if (this.props.existingOrder) {
+    if (this.props.existingOrder && this.props.orderNumber) {
       const { partNumber } = this.props.existingOrder;
       return partNumber;
     } else {
-      return "--";
+      return "";
     }
   }
 
   renderQuantity() {
-    if (this.props.existingOrder) {
+    if (this.props.existingOrder && this.props.orderNumber) {
       const { quantity } = this.props.existingOrder;
       return quantity;
     } else {
-      return "--";
+      return "";
     }
   }
 
@@ -88,6 +89,7 @@ function mapStateToProps(state: StoreState) {
   return {
     existingOrder: state.scanner.existingOrder,
     readerInputState: state.scanner.readerInputState,
+    orderNumber: state.scanner.pickedOrder || localStorage.getItem("order"),
   };
 }
 export default connect(mapStateToProps, actions)(OrderInfoCard);

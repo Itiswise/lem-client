@@ -205,6 +205,14 @@ export const scannerReducer = (
         errorMessage: "",
       }
 
+    case ActionTypes.CLEAR_PICKED_ORDER:
+        return {
+            ...state,
+            pickedOrder: "",
+            orderDetails: SCANNER_INITIAL_STATE.orderDetails,
+            errorMessage: "",
+        };
+
     case ActionTypes.PICK_OPERATORS:
       return {
         ...state,
