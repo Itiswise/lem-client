@@ -6,13 +6,14 @@ import { StoreState } from "../../../reducers";
 import "./DoneTodoCardStyle.scss";
 
 interface IDoneTodoCardProps {
+  orderNumber?: string | null;
   existingOrder?: OrderType;
   _line: string | null;
 }
 
 class DoneTodoCard extends Component<IDoneTodoCardProps> {
   renderDoneOnThisLine() {
-    if (this.props.existingOrder) {
+    if (this.props.existingOrder && this.props.orderNumber) {
       const { scans } = this.props.existingOrder;
       const { _line } = this.props;
       const scansWithoutErrorsOnThisLine = scans?.filter(
@@ -27,7 +28,7 @@ class DoneTodoCard extends Component<IDoneTodoCardProps> {
   }
 
   renderTodo() {
-    if (this.props.existingOrder) {
+    if (this.props.existingOrder && this.props.orderNumber) {
       const { scans, quantity } = this.props.existingOrder;
       if (!quantity) {
         return 0;
@@ -66,6 +67,7 @@ function mapStateToProps(state: StoreState) {
   return {
     _line: state.scanner.pickedLine || localStorage.getItem("line"),
     existingOrder: state.scanner.existingOrder,
+    orderNumber: state.scanner.pickedOrder || localStorage.getItem("order"),
   };
 }
 export default connect(mapStateToProps, actions)(DoneTodoCard);

@@ -110,7 +110,7 @@ class OperatorPicker extends Component<
 function mapStateToProps(state: StoreState) {
     const initialValue = (index: number) => ({
         [POSITIONS[index].value]: (state.scanner.existingOrder?.operators &&
-            state.scanner.existingOrder?.operators[index].operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[index].operator) || '',
+            state.scanner.existingOrder?.operators[index]?.operator) || (state.scanner.pickedOperators && state.scanner.pickedOperators[index]?.operator) || '',
     });
 
     const initialValues = {};

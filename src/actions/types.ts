@@ -44,6 +44,7 @@ import {
   PickOperatorsAction,
   UpdateOrderOperatorsAction,
   UpdateOrderOperatorsActionError,
+  ClearPickedOrderAction,
 } from "./scannerActions";
 
 import {
@@ -331,6 +332,8 @@ export enum ActionTypes {
 
   UPDATE_ORDER_OPERATORS,
   UPDATE_ORDER_OPERATORS_ERROR,
+
+  CLEAR_PICKED_ORDER,
 }
 
 export enum Tab {
@@ -392,7 +395,8 @@ export type ScannerAction =
   | GetScannerOperatorsActionError
   | PickOperatorsAction
   | UpdateOrderOperatorsAction
-  | UpdateOrderOperatorsActionError;
+  | UpdateOrderOperatorsActionError
+  | ClearPickedOrderAction;
 
 export type ModalAction =
   | OpenFinishModalAction
