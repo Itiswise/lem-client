@@ -5,9 +5,9 @@ import { connect } from "react-redux";
 import * as actions from "../../../actions";
 import {OperatorsListType} from "../../../actions";
 import { StoreState } from "../../../reducers";
-import UserIcon from "../../icons/UserIcon";
 import LineIcon from "../../icons/LineIcon";
 import {IPosition, operators as POSITIONS, ValidOperators} from "../../../utils/operators";
+import OperatorIcon from "../../icons/OperatorIcon";
 
 interface IOperatorPickerProps {
     errorMessage: string;
@@ -80,7 +80,7 @@ class OperatorPicker extends Component<
                             <span><LineIcon /> {POSITIONS[index].label}</span>
                         </label>
                         <label className="line-picker__label" htmlFor={`${POSITIONS[index].value}`}>
-                            <span><UserIcon /> Operator</span>
+                            <span><OperatorIcon /> Operator</span>
                             <Field
                                 name={`${POSITIONS[index].value}`}
                                 type="text"
