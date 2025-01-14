@@ -14,13 +14,15 @@ export type GetScannerOperatorsActionError = {
     payload: string;
 }
 
-export const getScannerOperators = () => async (dispatch: Dispatch) => {
+export const getScannerOperators = (orderNumber: string) => async (dispatch: Dispatch) => {
     try {
         const response = await axios.get(`${ROOT_URL}/api/operator`, {
             headers,
             params: {
                 page: 1,
                 limit: 200,
+                omitInOrders: true,
+                orderNumber,
             },
         });
         dispatch<GetScannerOperatorsAction>({

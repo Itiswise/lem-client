@@ -81,10 +81,10 @@ class AddOperator extends Component<InjectedFormProps<IAddOperator> & IAddOperat
                             required
                         />
                         <Field
-                            htmlFor="email"
-                            name="email"
-                            type="email"
-                            label="Email"
+                            htmlFor="identifier"
+                            name="identifier"
+                            type="text"
+                            label="Identifier"
                             component={renderField}
                             required
                             autoComplete="none"

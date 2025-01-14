@@ -7,7 +7,7 @@ export interface IEditOperator {
     _id: string;
     firstname: string;
     lastname: string;
-    email: string;
+    identifier: string;
 }
 
 export type EditOperatorBeginAction = {
@@ -24,7 +24,7 @@ export type EditedOperator = {
         _id: string;
         firstname: string;
         lastname: string;
-        email: string;
+        identifier: string;
         __v: number;
     }
 };
@@ -36,7 +36,7 @@ export type EditOperatorActionError = {
 
 export const editOperator =
     (
-        { _id, firstname, lastname, email }: IEditOperator,
+        { _id, firstname, lastname, identifier }: IEditOperator,
     ) =>
         async (dispatch: Dispatch) => {
             dispatch<EditOperatorBeginAction>({
@@ -48,7 +48,7 @@ export const editOperator =
                     {
                         firstname,
                         lastname,
-                        email,
+                        identifier,
                     },
                     {
                         headers,

@@ -7,7 +7,7 @@ export type OperatorsListType = {
     _id: string;
     firstname: string;
     lastname: string;
-    email: string;
+    identifier: string;
     __v: number;
 };
 

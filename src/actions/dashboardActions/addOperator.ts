@@ -6,7 +6,7 @@ import { ROOT_URL, headers } from "../../config";
 export interface IAddOperator {
     firstname: string;
     lastname: string;
-    email: string;
+    identifier: string;
 }
 
 export type AddOperatorBeginAction = {
@@ -31,7 +31,7 @@ export type AddOperatorActionError = {
 
 export const addOperator =
     (
-        { firstname, lastname, email }: IAddOperator,
+        { firstname, lastname, identifier }: IAddOperator,
     ) =>
         async (dispatch: Dispatch) => {
             dispatch<AddOperatorBeginAction>({
@@ -43,7 +43,7 @@ export const addOperator =
                     {
                         firstname,
                         lastname,
-                        email,
+                        identifier,
                     },
                     {
                         headers,

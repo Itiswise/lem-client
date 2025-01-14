@@ -8,13 +8,12 @@ import {
   OrderType,
   ScannerAction,
 } from "../actions";
-import {IPosition, operators, ValidOperators} from "../utils/operators";
+import {ValidOperators} from "../utils/operators";
 
 export interface IScannerState {
   message: string;
   lines: LineType[];
   operators: OperatorsListType[];
-  positions: IPosition[];
   userType: string;
   userName: string;
   userId: string;
@@ -39,16 +38,12 @@ const SCANNER_INITIAL_STATE: IScannerState = {
   message: "",
   lines: [],
   operators: [],
-  positions: operators,
   userType: "",
   userName: "",
   userId: "",
   userEmail: "",
   pickedOrder: "",
-  pickedOperators: operators.map((pos) => ({
-    position: pos.value,
-    operator: null,
-  })) as ValidOperators,
+  pickedOperators: [],
   menu: {
     menuContent: [
       {
@@ -103,10 +98,7 @@ const SCANNER_INITIAL_STATE: IScannerState = {
         timeStamp: "",
         errorCode: "",
         scanContent: "",
-        operators: operators.map((pos) => ({
-          position: pos.value,
-          operator: null,
-        })) as ValidOperators,
+        operators: [],
       },
     ],
   },
@@ -169,6 +161,7 @@ export const scannerReducer = (
       return {
         ...state,
         existingOrder: action.payload.existingOrder,
+        pickedOperators: action.payload.existingOrder?.operators || [],
         orderStats: action.payload.orderStats,
         hourlyRates: action.payload.hourlyRates,
         isOrderedQuantityMatchesValidScansQuantity:
@@ -217,10 +210,6 @@ export const scannerReducer = (
       return {
         ...state,
         pickedOperators: action.payload,
-        existingOrder: {
-          ...state.existingOrder,
-          operators: action.payload,
-        }
       };
 
     case ActionTypes.UPDATE_ORDER_OPERATORS:

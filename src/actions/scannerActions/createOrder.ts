@@ -2,12 +2,7 @@ import axios from "axios";
 import {Dispatch} from "redux";
 import {ActionTypes} from "../../actions";
 import {headers, ROOT_URL} from "../../config";
-import {ValidOperators, ValidPosition} from "../../utils/operators";
-
-export interface operatorsAttr {
-  position: ValidPosition;
-  operator: string | null;
-}
+import {ValidOperators} from "../../utils/operators";
 
 export interface ICreateOrder {
   orderNumber: string;
