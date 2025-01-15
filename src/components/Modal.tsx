@@ -158,9 +158,9 @@ class Modal extends Component<IModalProps> {
 
   handleAcceptOperatorClick = () => {
     const { operators, closeModal } = this.props;
-    const hasAllOperators = operators?.every((operator) => operator.operator);
+    const hasAllOperators = operators?.every((operator) => operator.operator && operator.operator.trim().length > 0);
 
-    if (hasAllOperators) {
+    if (operators?.length > 0 && hasAllOperators) {
       this.createNewOrder(operators, () => {
         closeModal();
       });
@@ -174,9 +174,9 @@ class Modal extends Component<IModalProps> {
   }
   handleResumeOperatorClick = () => {
     const { orderNumber, operators, closeModal, updateOrderOperators } = this.props;
-    const hasAllOperators = operators?.every((operator) => operator.operator);
+    const hasAllOperators = operators?.every((operator) => operator.operator && operator.operator.trim().length > 0);
 
-    if (hasAllOperators && orderNumber) {
+    if (operators?.length > 0 && hasAllOperators && orderNumber) {
       updateOrderOperators(orderNumber, operators, () => {
           this.endCurrentBreak();
           closeModal();
@@ -197,7 +197,7 @@ class Modal extends Component<IModalProps> {
         onClick={this.handleCancelClick}
       >
         <div className="modal__card" onClick={(e) => e.stopPropagation()}
-             style={modalAction === 'accept operator' || modalAction === 'resume operator' ? {height: 'fit-content'} : {}}>
+             style={modalAction === 'accept operator' || modalAction === 'resume operator' ? {height: 'fit-content', maxHeight: '90vh', overflowY: 'auto'} : {}}>
           <div className="modal__card__header">{modalHeader}</div>
           {modalAction === 'accept operator' || modalAction === 'resume operator' ? (
               <OperatorPicker />
@@ -213,7 +213,7 @@ class Modal extends Component<IModalProps> {
                 modalAction === "finish" ? "btn--" + modalAction : "btn--delete"
               }`}
               onClick={this.handleActionClick}
-              disabled={modalAction === 'accept operator' || modalAction === 'resume operator' ? !this.props.operators?.every((operator) => operator.operator) : false}
+              disabled={modalAction === 'accept operator' || modalAction === 'resume operator' ? this.props.operators?.length === 0 || !this.props.operators?.every((operator) => operator.operator && operator.operator.trim().length > 0) : false}
             >
               {modalAction === 'accept operator' || modalAction === 'resume operator' ? `${modalAction}` : `YES, ${modalAction}`}
             </button>
@@ -245,7 +245,7 @@ function mapStateToProps(state: StoreState) {
     callbackOnClose: state.modal.callbackOnClose,
     errorMessage: state.modal.errorMessage,
     errorDashboardMessage: state.dashboard.errorMessage,
-    operators: state.scanner.existingOrder?.operators || state.scanner.pickedOperators,
+    operators: state.scanner.pickedOperators,
     menu: state.scanner.menu,
     _line: state.scanner.pickedLine || localStorage.getItem("line"),
   };

@@ -7,7 +7,7 @@ interface IOperatorItemProps {
     _id: string;
     firstname: string;
     lastname: string;
-    email: string;
+    identifier: string;
     __v: number;
     startEditingOperator: (Operator: OperatorsListType) => void;
     openDeleteOperatorModal: ({ _id }: { _id: string }) => void;
@@ -15,14 +15,14 @@ interface IOperatorItemProps {
 
 class OperatorItem extends Component<IOperatorItemProps> {
     render() {
-        const { _id, firstname, lastname, email, __v, openDeleteOperatorModal, startEditingOperator} = this.props;
+        const { _id, firstname, lastname, identifier, __v, openDeleteOperatorModal, startEditingOperator} = this.props;
 
         return (
             <div className="redirection-row">
                 <div className="redirection-row__items" style={{padding: '16px 0'}}>
                     <span className="redirection-row__item--first">{firstname}</span>
                     <span className="redirection-row__item">{lastname}</span>
-                    <span className="redirection-row__item">{email}</span>
+                    <span className="redirection-row__item">{identifier}</span>
                 </div>
 
                 <div className="redirection-row__buttons">
@@ -33,7 +33,7 @@ class OperatorItem extends Component<IOperatorItemProps> {
                                 _id,
                                 firstname,
                                 lastname,
-                                email,
+                                identifier,
                                 __v
                             });
                         }}

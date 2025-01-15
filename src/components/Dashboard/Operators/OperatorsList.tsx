@@ -53,7 +53,7 @@ class OperatorsList extends Component<IOperatorsListProps, IOperatorsListState> 
                 <div className="redirections-list__header">
                     <span className="redirections-list__header__item--first">firstname</span>
                     <span className="redirections-list__header__item">lastname</span>
-                    <span className="redirections-list__header__item">email</span>
+                    <span className="redirections-list__header__item">identifier</span>
                 </div>
                 <div className="redirections-list">
                     { this.props.operators && this.props.operators.map((operator) => <OperatorItem
@@ -61,7 +61,7 @@ class OperatorsList extends Component<IOperatorsListProps, IOperatorsListState> 
                         _id={operator._id}
                         firstname={operator.firstname}
                         lastname={operator.lastname}
-                        email={operator.email}
+                        identifier={operator.identifier}
                         __v={operator.__v}
                     />)}
                 </div>

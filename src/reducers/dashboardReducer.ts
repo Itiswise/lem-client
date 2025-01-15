@@ -57,7 +57,7 @@ const DASHBOARD_INITIAL_STATE: IDashboardState = {
     _id: "",
     firstname: "",
     lastname: "",
-    email: "",
+    identifier: "",
     __v: 0,
   },
   partnumbers: [],
