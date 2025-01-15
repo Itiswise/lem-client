@@ -26,7 +26,7 @@ interface IGameProps {
 class Game extends Component<IGameProps> {
   getLineDescription() {
     const { lines, _line } = this.props;
-    return lines.filter((line) => line._id === _line)[0].lineDescription;
+    return lines.filter((line) => line._id === _line)[0]?.lineDescription || "";
   }
 
   getHour(timestring: string) {
