@@ -59,7 +59,7 @@ class OperatorPicker extends Component<
 
     handleRemoveOperator = (position: number) => {
         const { pickedOperators } = this.props;
-        const updatedOperators = pickedOperators.filter((operator) => operator.position !== position);
+        const updatedOperators = pickedOperators.filter((operator) => operator.position !== position).map((operator, index) => ({ ...operator, position: index + 1 }));
 
         this.props.pickOperators(updatedOperators);
     };
@@ -151,8 +151,6 @@ function mapStateToProps(state: StoreState) {
     for (let i = 0; i < length; i++) {
         Object.assign(initialValues, initialValue(i));
     }
-
-    console.log(state.scanner.existingOrder?.operators);
 
     return {
         errorMessage: state.scanner.errorMessage,

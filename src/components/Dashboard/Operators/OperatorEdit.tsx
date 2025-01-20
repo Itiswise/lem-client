@@ -92,7 +92,7 @@ class OperatorEdit extends Component<InjectedFormProps<IEditOperator> & IEditOpe
                         />
                         <div style={{ padding: '24px 0' }}>{this.props.errorMessage}</div>
                         <button className="btn btn--accent" disabled={submitting}>
-                            Edit Operator
+                            Save Changes
                         </button>
                     </form>
                 </div>
