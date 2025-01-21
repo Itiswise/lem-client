@@ -17,7 +17,7 @@ import {
 import { StoreState } from "../../../reducers";
 import ScannerIcon from "../../icons/ScannerIcon";
 import "./ReaderInputStyle.scss";
-import {ValidOperators} from "../../../utils/operators";
+import {scanOperatorsAttr, ValidScanOperators} from "../../../utils/operators";
 
 interface IReaderInputProps {
   errorMessage: string;
@@ -82,10 +82,12 @@ class ReaderInput extends Component<
       existingOrder,
     } = this.props;
 
-    const operators = existingOrder?.operators?.map((operator) => ({
+    const operators = existingOrder?.operators?.map((operator): scanOperatorsAttr => ({
       position: operator.position,
-      operator: operator.operator,
-    })) as ValidOperators;
+      firstName: operator.firstName,
+      lastName: operator.lastName,
+      identifier: operator.identifier,
+    })) as ValidScanOperators;
 
     insertScan({
       scanContent,

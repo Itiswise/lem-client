@@ -36,12 +36,13 @@ class OperatorPicker extends Component<
     }
 
     handleOperatorChange = (formProps: IFormProps) => {
-        const { pickedOperators } = this.props;
+        const { pickedOperators, operators } = this.props;
         const { value, name } = formProps.target;
 
         const updatedOperators = pickedOperators?.map((operator) => {
+            const operatorModel = operators.find((operator) => operator._id === value);
             if (`operator-${operator.position}` === name) {
-                return { ...operator, operator: value };
+                return { ...operator, operator: value, position: operator.position, firstName: operatorModel?.firstname, lastName: operatorModel?.lastname, identifier: operatorModel?.identifier };
             }
             return operator;
         }) as ValidOperators;
@@ -52,7 +53,7 @@ class OperatorPicker extends Component<
     handleAddOperator = () => {
         const { pickedOperators } = this.props;
         const position = pickedOperators.length + 1;
-        const updatedOperators = [...pickedOperators, { position, operator: null }];
+        const updatedOperators = [...pickedOperators, { position, operator: null, firstName: '', lastName: '', identifier: '' }];
 
         this.props.pickOperators(updatedOperators);
     };

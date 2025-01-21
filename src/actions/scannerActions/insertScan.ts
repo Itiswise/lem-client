@@ -3,14 +3,14 @@ import { Dispatch } from "redux";
 import {ActionTypes, OrderType, HourlyRatesType} from "../../actions";
 import { ROOT_URL, headers } from "../../config";
 import { playProperSound } from "../../utils/audioPlayer";
-import {ValidOperators} from "../../utils/operators";
+import {ValidScanOperators} from "../../utils/operators";
 
 export interface IInsertScan {
   scanContent: string;
   _line: string;
   _user: string;
   orderNumber: string;
-  operators?: ValidOperators;
+  operators?: ValidScanOperators;
 }
 
 export type OrderStatisticsType = {
