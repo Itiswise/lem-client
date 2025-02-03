@@ -7,6 +7,7 @@ export interface operatorsAttr {
     firstName: string;
     lastName: string;
     identifier: string;
+    _line?: string | null;
 }
 
 export interface scanOperatorsAttr {
@@ -14,4 +15,5 @@ export interface scanOperatorsAttr {
     firstName: string;
     lastName: string;
     identifier: string;
+    _line?: string | null;
 }
