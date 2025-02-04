@@ -13,6 +13,7 @@ import OperatorIcon from "../../icons/OperatorIcon";
 interface IOperatorPickerProps {
     errorMessage: string;
     orderNumber?: string | null;
+    pickedLine?: string | null;
     initialValues: ValidOperators;
     pickedOperators: ValidOperators;
     isPaused: boolean;
@@ -20,7 +21,7 @@ interface IOperatorPickerProps {
     readerInputState: {
         isDisabled: boolean;
     };
-    getScannerOperators: (orderNumber: string) => void;
+    getScannerOperators: (orderNumber: string, pickedLine: string) => void;
     pickOperators: (operators: ValidOperators) => void;
 }
 
@@ -32,7 +33,7 @@ class OperatorPicker extends Component<
     InjectedFormProps<IFormProps> & IOperatorPickerProps
 > {
     componentDidMount() {
-        this.props.orderNumber && this.props.getScannerOperators(this.props.orderNumber);
+        this.props.orderNumber && this.props.pickedLine && this.props.getScannerOperators(this.props.orderNumber, this.props.pickedLine);
     }
 
     handleOperatorChange = (formProps: IFormProps) => {
@@ -42,10 +43,12 @@ class OperatorPicker extends Component<
         const updatedOperators = pickedOperators?.map((operator) => {
             const operatorModel = operators.find((operator) => operator._id === value);
             if (`operator-${operator.position}` === name) {
-                return { ...operator, operator: value, position: operator.position, firstName: operatorModel?.firstname, lastName: operatorModel?.lastname, identifier: operatorModel?.identifier };
+                return { ...operator, operator: value, position: operator.position, firstName: operatorModel?.firstname, lastName: operatorModel?.lastname, identifier: operatorModel?.identifier, _line: this.props.pickedLine };
             }
             return operator;
         }) as ValidOperators;
+
+        console.log(updatedOperators);
 
         this.props.pickOperators(updatedOperators);
     };
@@ -165,6 +168,7 @@ function mapStateToProps(state: StoreState) {
         isPaused: state.scanner.isPaused,
         operators: state.scanner.operators,
         readerInputState: state.scanner.readerInputState,
+        pickedLine: state.scanner.pickedLine || (localStorage.getItem("line") as string),
     };
 }
 
