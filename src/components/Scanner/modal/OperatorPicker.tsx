@@ -48,6 +48,8 @@ class OperatorPicker extends Component<
             return operator;
         }) as ValidOperators;
 
+        console.log(updatedOperators);
+
         this.props.pickOperators(updatedOperators);
     };
 
