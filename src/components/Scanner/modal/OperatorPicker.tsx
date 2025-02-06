@@ -37,13 +37,13 @@ class OperatorPicker extends Component<
     }
 
     handleOperatorChange = (formProps: IFormProps) => {
-        const { pickedOperators, operators } = this.props;
+        const { pickedOperators, operators, pickedLine } = this.props;
         const { value, name } = formProps.target;
 
         const updatedOperators = pickedOperators?.map((operator) => {
             const operatorModel = operators.find((operator) => operator._id === value);
             if (`operator-${operator.position}` === name) {
-                return { ...operator, operator: value, position: operator.position, firstName: operatorModel?.firstname, lastName: operatorModel?.lastname, identifier: operatorModel?.identifier, _line: this.props.pickedLine };
+                return { ...operator, operator: value, position: operator.position, firstName: operatorModel?.firstname, lastName: operatorModel?.lastname, identifier: operatorModel?.identifier, _line: pickedLine };
             }
             return operator;
         }) as ValidOperators;
@@ -54,9 +54,9 @@ class OperatorPicker extends Component<
     };
 
     handleAddOperator = () => {
-        const { pickedOperators } = this.props;
+        const { pickedOperators, pickedLine } = this.props;
         const position = pickedOperators.length + 1;
-        const updatedOperators = [...pickedOperators, { position, operator: null, firstName: '', lastName: '', identifier: '' }];
+        const updatedOperators = [...pickedOperators, { position, operator: null, firstName: '', lastName: '', identifier: '', _line: pickedLine }];
 
         this.props.pickOperators(updatedOperators);
     };
@@ -145,12 +145,17 @@ class OperatorPicker extends Component<
 }
 
 function mapStateToProps(state: StoreState) {
+    const pickedLine = state.scanner.pickedLine && state.scanner.pickedLine.trim() !== ""
+            ? state.scanner.pickedLine
+            : (localStorage.getItem("line") as string);
+    const filteredOperators = state.scanner.pickedOperators.filter((operator) => operator._line === pickedLine);
+
     const initialValue = (index: number) => ({
-        [`operator-${index + 1}`]: (state.scanner.pickedOperators && state.scanner.pickedOperators[index]?.operator) || '',
+        [`operator-${index + 1}`]: (filteredOperators && filteredOperators[index]?.operator) || '',
     });
 
     const initialValues = {};
-    const length = state.scanner.pickedOperators.length || 1;
+    const length = filteredOperators.length || 1;
 
     for (let i = 0; i < length; i++) {
         Object.assign(initialValues, initialValue(i));
@@ -160,7 +165,7 @@ function mapStateToProps(state: StoreState) {
         errorMessage: state.scanner.errorMessage,
         initialValues,
         orderNumber: state.scanner.pickedOrder || localStorage.getItem("order"),
-        pickedOperators: state.scanner.pickedOperators.length ? state.scanner.pickedOperators : [{
+        pickedOperators: filteredOperators.length ? filteredOperators : [{
             position: 1,
             operator: null
         }],
@@ -168,7 +173,7 @@ function mapStateToProps(state: StoreState) {
         isPaused: state.scanner.isPaused,
         operators: state.scanner.operators,
         readerInputState: state.scanner.readerInputState,
-        pickedLine: state.scanner.pickedLine || (localStorage.getItem("line") as string),
+        pickedLine
     };
 }
 
