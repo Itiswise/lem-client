@@ -161,7 +161,6 @@ export const scannerReducer = (
       return {
         ...state,
         existingOrder: action.payload.existingOrder,
-        pickedOperators: action.payload.existingOrder?.operators || [],
         orderStats: action.payload.orderStats,
         hourlyRates: action.payload.hourlyRates,
         isOrderedQuantityMatchesValidScansQuantity:
@@ -219,7 +218,10 @@ export const scannerReducer = (
           ...state.existingOrder,
           operators: action.payload,
         },
-        pickedOperators: action.payload,
+        pickedOperators: [{
+          position: 1,
+          operator: null
+        }],
         errorMessage: "",
       };
 

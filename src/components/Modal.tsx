@@ -172,16 +172,24 @@ class Modal extends Component<IModalProps> {
     addBreakEnd({ orderNumber, _line });
     resumeOrder();
   }
-  handleResumeOperatorClick = () => {
-    const { orderNumber, operators, closeModal, updateOrderOperators } = this.props;
-    const hasAllOperators = operators?.every((operator) => operator.operator && operator.operator.trim().length > 0);
 
-    if (operators?.length > 0 && hasAllOperators && orderNumber) {
-      updateOrderOperators(orderNumber, operators, () => {
+  private debounceTimer: NodeJS.Timeout | null = null;
+  handleResumeOperatorClick = () => {
+    if (this.debounceTimer) return;
+
+    this.debounceTimer = setTimeout(() => {
+      const { orderNumber, operators, closeModal, updateOrderOperators } = this.props;
+      const hasAllOperators = operators?.every((operator) => operator.operator && operator.operator.trim().length > 0);
+
+      if (operators?.length > 0 && hasAllOperators && orderNumber) {
+        updateOrderOperators(orderNumber, operators, () => {
           this.endCurrentBreak();
           closeModal();
-      });
-    }
+        });
+      }
+
+      this.debounceTimer = null;
+    }, 500);
   };
 
   handleCancelClick = () => {
