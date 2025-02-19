@@ -26,7 +26,7 @@ interface IGameProps {
 class Game extends Component<IGameProps> {
   getLineDescription() {
     const { lines, _line } = this.props;
-    return lines.filter((line) => line._id === _line)[0].lineDescription;
+    return lines.filter((line) => line._id === _line)[0]?.lineDescription || "";
   }
 
   getHour(timestring: string) {
@@ -45,7 +45,8 @@ class Game extends Component<IGameProps> {
 
   getStatsFromLastThreeHours() {
     const { hourlyRates } = this.props;
-    const lastThree = hourlyRates?.slice(-3);
+    const safeHourlyRates = Array.isArray(hourlyRates) ? hourlyRates : [];
+    const lastThree = safeHourlyRates?.slice(-3);
     return lastThree?.map((x) => {
       return {
         hour: this.getHour(x.dateHour),
@@ -86,7 +87,7 @@ class Game extends Component<IGameProps> {
     const paces = stats.map((x) => x.sum);
     const max = Math.max(gamePace, ...paces);
 
-    return stats.map((x, i) => (
+    return this.props.orderNumber ? stats.map((x, i) => (
       <div
         key={i}
         className={`game-v3__block ${i % 2 && "game-v3__block--darken"}`}
@@ -103,7 +104,7 @@ class Game extends Component<IGameProps> {
         </div>
         <div className="game-v3__hour">{x.hour}:00</div>
       </div>
-    ));
+    )) : '';
   }
 
   render() {
@@ -111,7 +112,7 @@ class Game extends Component<IGameProps> {
     const { meanCycleTimeInMilliseconds } = orderStats;
     const mct = meanCycleTimeInMilliseconds / 1000;
     const tt = this.getTactTime();
-    const color = getColor({ givenTime: tt, actualTime: mct });
+    const color = this.props.orderNumber ? getColor({ givenTime: tt, actualTime: mct }) : '';
 
     return (
       <div className={`game-v3 game-v3--${color}`}>

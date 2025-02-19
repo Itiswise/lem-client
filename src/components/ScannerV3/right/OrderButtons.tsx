@@ -35,6 +35,7 @@ interface IOrderButtonsProps {
     partNumber,
     qrCode,
     customer,
+    operators,
   }: ICreateOrder) => void;
   addBreakStart: ({ orderNumber, _line }: IAddBreakStart) => void;
   pauseOrder: () => PauseOrderAction;
@@ -42,6 +43,8 @@ interface IOrderButtonsProps {
   resumeOrder: () => ResumeOrderAction;
   openFinishModal: () => OpenFinishModalAction;
   openDeleteModal: () => OpenDeleteModalAction;
+  openOperatorModal: ({ orderNumber }: { orderNumber: string }) => void;
+  openResumeOperatorModal: ({ orderNumber }: { orderNumber: string }) => void;
 }
 
 class OrderButtons extends Component<IOrderButtonsProps> {
@@ -82,6 +85,16 @@ class OrderButtons extends Component<IOrderButtonsProps> {
     } else return false;
   }
 
+  handleOperatorModal() {
+    const { orderNumber, openOperatorModal } = this.props;
+    orderNumber && openOperatorModal({ orderNumber });
+  }
+
+  handleResumeOperatorModal() {
+    const { orderNumber, openResumeOperatorModal } = this.props;
+    orderNumber && openResumeOperatorModal({ orderNumber });
+  }
+
   createNewOrder() {
     if (this.props.menu) {
       const orders = this.props.menu.menuContent;
@@ -92,7 +105,7 @@ class OrderButtons extends Component<IOrderButtonsProps> {
 
       const details = filteredOrders[0];
 
-      const { orderNumber, quantity, partNumber, qrCode, customer } = details;
+      const { orderNumber, quantity, partNumber, qrCode, customer, } = details;
 
       const orderInfo = {
         orderNumber,
@@ -112,14 +125,8 @@ class OrderButtons extends Component<IOrderButtonsProps> {
     pauseOrder();
   }
 
-  endCurrentBreak() {
-    const { orderNumber, _line, addBreakEnd, resumeOrder } = this.props;
-    addBreakEnd({ orderNumber, _line });
-    resumeOrder();
-  }
-
   handleStartClick = () => {
-    this.createNewOrder();
+    this.handleOperatorModal();
   };
 
   handlePauseClick = () => {
@@ -127,7 +134,7 @@ class OrderButtons extends Component<IOrderButtonsProps> {
   };
 
   handleResumeClick = () => {
-    this.endCurrentBreak();
+    this.handleResumeOperatorModal();
   };
 
   handleFinishClick = () => {

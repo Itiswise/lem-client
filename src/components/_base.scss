@@ -272,6 +272,7 @@ em {
   gap: 10px;
   width: 100%;
   user-select: none;
+  padding-bottom: 32px;
 
   a {
     display: block;
@@ -303,5 +304,48 @@ em {
     cursor: default;
     pointer-events: none;
     opacity: 0.8;
+  }
+}
+
+.form {
+  margin-top: 32px;
+}
+
+.form__group {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 180px 1fr;
+  }
+
+  & + & {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid $disabled-color;
+  }
+}
+
+.form__group label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+
+  select {
+    margin: 0;
+  }
+}
+
+.form__group label span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+
+  svg {
+    margin: 0;
+    padding: 0;
   }
 }

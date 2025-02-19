@@ -9,6 +9,10 @@ export interface IPickLine {
   userName: string;
 }
 
+export type ClearPickedOrderAction = {
+    type: ActionTypes.CLEAR_PICKED_ORDER;
+}
+
 export type PickLineAction = {
   type: ActionTypes.PICK_LINE;
   payload: string;
@@ -22,6 +26,9 @@ export type PickLineActionError = {
 export const pickLine =
   ({ currentLineId, newLineId, userName }: IPickLine) =>
   async (dispatch: Dispatch) => {
+    dispatch<ClearPickedOrderAction>({
+        type: ActionTypes.CLEAR_PICKED_ORDER,
+    });
     try {
       await axios.put(
         `${ROOT_URL}/api/line/status`,

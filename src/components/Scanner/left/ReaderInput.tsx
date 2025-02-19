@@ -35,7 +35,7 @@ interface IReaderInputProps {
   enableReaderInput: () => EnableReaderInputAction;
   getPartnumberConfig: () => void;
   partnumberConfig: PartnumberConfigType;
-  insertScan: ({ scanContent, _line, _user, orderNumber }: IInsertScan) => void;
+  insertScan: ({ scanContent, _line, _user, orderNumber, operators }: IInsertScan) => void;
   addBreakStart: ({ orderNumber, _line }: IAddBreakStart) => void;
   closeOrder: ({ orderNumber }: ICloseOrder) => void;
   pauseOrder: () => PauseOrderAction;

@@ -1,7 +1,8 @@
 import axios from "axios";
-import { Dispatch } from "redux";
-import { ActionTypes } from "../../actions";
-import { ROOT_URL, headers } from "../../config";
+import {Dispatch} from "redux";
+import {ActionTypes} from "../../actions";
+import {headers, ROOT_URL} from "../../config";
+import {ValidOperators} from "../../utils/operators";
 
 export interface ICreateOrder {
   orderNumber: string;
@@ -11,6 +12,7 @@ export interface ICreateOrder {
   customer: string;
   orderStatus?: string;
   orderAddedAt?: string;
+  operators?: ValidOperators;
 }
 
 export type OrderType = {
@@ -34,9 +36,11 @@ export type OrderType = {
     timeStamp?: string;
     errorCode?: string;
     scanContent?: string;
+    operators?: ValidOperators;
     _line?: string;
     _user?: string;
   }[];
+  operators?: ValidOperators;
 };
 
 export type CreateOrderAction = {
@@ -50,7 +54,7 @@ export type CreateOrderActionError = {
 };
 
 export const createOrder =
-  ({ orderNumber, quantity, partNumber, qrCode, customer }: ICreateOrder) =>
+    ({orderNumber, quantity, partNumber, qrCode, customer, operators}: ICreateOrder, callback?: () => void) =>
   async (dispatch: Dispatch) => {
     try {
       const resp = await axios.post(
@@ -74,6 +78,7 @@ export const createOrder =
           qrCode,
           tactTime,
           customer,
+          operators,
         },
         {
           headers,
@@ -83,10 +88,14 @@ export const createOrder =
         type: ActionTypes.CREATE_ORDER,
         payload: response.data,
       });
+
+      if (callback) {
+        callback();
+      }
     } catch (e: any) {
       dispatch<CreateOrderActionError>({
         type: ActionTypes.CREATE_ORDER_ERROR,
-        payload: "Can not create this order - incomplete information",
+        payload: "Can not create this order - incomplete or wrong information",
       });
     }
   };

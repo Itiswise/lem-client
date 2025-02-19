@@ -1,4 +1,4 @@
-import { ModalAction, ActionTypes } from "../actions";
+import {ActionTypes, ModalAction} from "../actions";
 
 export interface IModalState {
   isModalOpened?: boolean;
@@ -11,10 +11,15 @@ export interface IModalState {
     | "delete product"
     | "delete order"
     | "delete partnumber"
+    | "delete operator"
+    | "accept operator"
+    | "resume operator"
     | "";
   redirectionId?: string;
   productId?: string;
   partnumberId?: string;
+  operatorId?: string;
+  orderNumber?: string | null;
   callbackOnClose?: () => void;
   errorMessage?: string;
 }
@@ -27,6 +32,8 @@ const MODAL_INITIAL_STATE: IModalState = {
   redirectionId: "",
   productId: "",
   partnumberId: "",
+  operatorId: "",
+  orderNumber: "",
   errorMessage: "",
 };
 
@@ -110,6 +117,37 @@ export const modalReducer = (
                  smash the “YES…” button`,
         modalAction: "delete partnumber",
         partnumberId: action.payload,
+      };
+
+    case ActionTypes.OPEN_DELETE_OPERATOR_MODAL:
+      return {
+        ...state,
+        isModalOpened: true,
+        modalHeader: "Are you sure you want to delete this operator?",
+        modalContent: `It can't be undone! So, if you are really 100% sure,
+                 smash the “YES…” button`,
+        modalAction: "delete operator",
+        operatorId: action.payload,
+      };
+
+    case ActionTypes.OPEN_OPERATOR_MODAL:
+      return {
+        ...state,
+        isModalOpened: true,
+        modalHeader: "Select a list of operators for this order",
+        modalContent: ``,
+        modalAction: "accept operator",
+        orderNumber: action.payload,
+      };
+
+    case ActionTypes.OPEN_RESUME_OPERATOR_MODAL:
+      return {
+        ...state,
+        isModalOpened: true,
+        modalHeader: "Resume or change a list of operators for this order",
+        modalContent: ``,
+        modalAction: "resume operator",
+        orderNumber: action.payload,
       };
 
     case ActionTypes.SET_MODAL_ERROR_MESSAGE:

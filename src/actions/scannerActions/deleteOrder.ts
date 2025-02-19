@@ -4,7 +4,7 @@ import { ActionTypes } from "../../actions";
 import { ROOT_URL, headers } from "../../config";
 
 export interface IDeleteOrder {
-  orderNumber: string | null;
+  orderNumber?: string | null;
 }
 
 export type DeleteOrderAction = {
