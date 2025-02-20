@@ -30,3 +30,4 @@ export * from "./backToOperatorsList";
 export * from "./deleteOperator";
 export * from "./startEditingOperator";
 export * from "./editOperator";
+export * from "./deleteOrderOperators";

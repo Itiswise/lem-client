@@ -59,6 +59,7 @@ import {
   OpenOperatorModalAction,
   OpenResumeOperatorModalAction,
   SetModalErrorMessageAction,
+  OpenDeleteOrderOperatorsModalAction,
 } from "./modalActions";
 
 import {
@@ -116,6 +117,8 @@ import {
   EditOperatorBeginAction,
   EditOperatorAction,
   EditOperatorActionError,
+  DeleteOrderOperatorsAction,
+  DeleteOrderOperatorsActionError,
 } from "./dashboardActions";
 
 import {
@@ -333,7 +336,13 @@ export enum ActionTypes {
   UPDATE_ORDER_OPERATORS,
   UPDATE_ORDER_OPERATORS_ERROR,
 
+  DELETE_ORDER_OPERATORS,
+  DELETE_ORDER_OPERATORS_ERROR,
+
   CLEAR_PICKED_ORDER,
+
+    OPEN_DELETE_ORDER_OPERATORS_MODAL,
+
 }
 
 export enum Tab {
@@ -409,7 +418,9 @@ export type ModalAction =
   | OpenDeleteOperatorModalAction
   | OpenOperatorModalAction
   | OpenResumeOperatorModalAction
-  | SetModalErrorMessageAction;
+  | SetModalErrorMessageAction
+  | OpenDeleteOrderOperatorsModalAction
+  | DeleteOrderOperatorsActionError;
 
 export type DashboardAction =
   | ChooseSidebarTabAction
@@ -466,7 +477,9 @@ export type DashboardAction =
  | StartEditingOperatorAction
  | EditOperatorBeginAction
  | EditOperatorAction
- | EditOperatorActionError;
+ | EditOperatorActionError
+ | DeleteOrderOperatorsAction
+ | DeleteOrderOperatorsActionError;
 
 export type WidsAction =
   | GetRedirectionsAction
