@@ -31,7 +31,7 @@ export const deleteOrderOperators =
                     callback();
                 }
             } catch (e: any) {
-                dispatch<DeleteOrderOperatorsActionError>(<DeleteOrderOperatorsActionError>{
+                dispatch<DeleteOrderOperatorsActionError>({
                     type: ActionTypes.DELETE_ORDER_OPERATORS_ERROR,
                     payload: e.response.data.error || "Error deleting operators",
                 });
