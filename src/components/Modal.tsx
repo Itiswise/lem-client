@@ -15,6 +15,7 @@ interface IModalProps extends IModalState {
   closeModal: (callbackOnClose?: () => void) => actions.CloseModalAction;
   closeOrder: ({ orderNumber }: actions.ICloseOrder) => void;
   deleteOrder: ({ orderNumber }: actions.IDeleteOrder) => void;
+  deleteOrderOperators: (orderNumber: string, operators: ValidOperators, callback?: () => void) => void;
   deleteRedirection: (redirectionId?: string) => void;
   deleteProduct: (productId?: string) => void;
   deleteOperator: (operatorId?: string, callback?: () => void) => void;
@@ -83,6 +84,10 @@ class Modal extends Component<IModalProps> {
         this.handleResumeOperatorClick();
         break;
 
+      case "delete order operators":
+        this.handleDeleteOrderOperatorsClick();
+        break;
+
       default:
         return;
     }
@@ -127,6 +132,14 @@ class Modal extends Component<IModalProps> {
   handleDeleteOperatorClick = () => {
     const { operatorId, deleteOperator, closeModal } = this.props;
     deleteOperator(operatorId, function() {
+      closeModal();
+    });
+  };
+
+  handleDeleteOrderOperatorsClick = () => {
+    const { orderNumberFromStats, deleteOrderOperators, closeModal } = this.props;
+    if (!orderNumberFromStats) return;
+    deleteOrderOperators(orderNumberFromStats, [], () => {
       closeModal();
     });
   };
